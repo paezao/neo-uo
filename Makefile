@@ -1,5 +1,5 @@
 SRC=src/*.c
-BIN=openuo
+BIN=uo
 
 all:
 	mkdir -p bin
