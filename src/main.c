@@ -6,7 +6,7 @@ int main()
     int screenWidth = 800;
     int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "Open UO");
+    InitWindow(screenWidth, screenHeight, "Modern UO");
 
     SetTargetFPS(60);
 
