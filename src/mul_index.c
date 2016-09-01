@@ -18,6 +18,34 @@ struct MulIndexEntry mul_index_entry(const char *path, int entry_id)
     return index;
 }
 
+struct MulIndexEntry * mul_index_entries(const char *path)
+{
+    struct MulIndexEntry *indexes;
+
+    FILE *fp = fopen(path, "r");
+
+    fseek(fp, 0, SEEK_END); // seek to end of file
+    int size = ftell(fp); // get current file pointer
+    fseek(fp, 0, SEEK_SET); // seek back to beginning of file
+
+    int nr_of_entries = size / sizeof(struct MulIndexEntry);
+
+    indexes = malloc(nr_of_entries * sizeof(struct MulIndexEntry));
+
+    for(int i=0; i < nr_of_entries; i++)
+    {
+        struct MulIndexEntry index;
+        fread(&index.lookup, sizeof(int32_t), 1, fp);
+        fread(&index.length, sizeof(int32_t), 1, fp);
+        fread(&index.extra, sizeof(int32_t), 1, fp);
+        indexes[i] = index;
+    }
+
+    fclose(fp);
+
+    return indexes;
+}
+
 struct MulTexMap mul_tex_map(const char *path, struct MulIndexEntry index)
 {
     struct MulTexMap tex_map;
@@ -51,7 +79,7 @@ struct MulTexMap mul_tex_map(const char *path, struct MulIndexEntry index)
         tex_map.data[offset + 3] = (uint8_t)255;
     }
 
-    free(buffer);
+    //free(buffer);
 
     fclose(fp);
 
