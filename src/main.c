@@ -78,12 +78,19 @@ int main()
         if (IsKeyDown(KEY_UP)) player_location_y -= 1;
         if (IsKeyDown(KEY_DOWN)) player_location_y += 1;
 
+        BeginDrawing();
+
         ClearBackground(BLACK);
 
         Begin3dOrthoMode();
 
         int player_block_x = player_location_x / 8;
         int player_block_y = player_location_y / 8;
+
+        // Top
+        render_map_block(player_block_x, player_block_y - 1, half_screen_width + 44 * 4 * 1, half_screen_height - 44 * 4 * 1);
+        render_map_block(player_block_x - 1, player_block_y - 1, half_screen_width, half_screen_height - 44 * 4 * 2);
+        render_map_block(player_block_x + 1, player_block_y - 1, half_screen_width + 44 * 4 * 2, half_screen_height);
         
         // Middle
         render_map_block(player_block_x, player_block_y, half_screen_width, half_screen_height);
@@ -96,6 +103,7 @@ int main()
         render_map_block(player_block_x, player_block_y + 1, half_screen_width - 44 * 4 * 1, half_screen_height + 44 * 4 * 1);
         render_map_block(player_block_x - 1, player_block_y + 1, half_screen_width - 44 * 4 * 2, half_screen_height);
         render_map_block(player_block_x - 2, player_block_y + 1, half_screen_width - 44 * 4 * 3, half_screen_height - 44 * 4 * 1);
+        render_map_block(player_block_x + 1, player_block_y + 1, half_screen_width, half_screen_height + 44 * 4 * 2);
 
         End3dMode();
 
