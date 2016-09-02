@@ -9,29 +9,35 @@ struct Map0 *map;
 
 void render_map_block(int x, int y, int offset_x, int offset_y)
 {
-    struct MulMapBlock block = map->blocks[x][y];
+    int block_nr = (x * 512) + y;
+    struct MulMapBlock block = map->blocks[block_nr];
 
     int tile_size = 44;
     int half_tile = tile_size / 2;
 
-    int initial_tiling_offset_x = offset_x;
-    int initial_tiling_offset_y = offset_y - 3 * tile_size;
+    //int initial_tiling_offset_x = offset_x;
+    //int initial_tiling_offset_y = offset_y - 3 * tile_size;
+    
+    int initial_tiling_offset_x = offset_x - 3 * tile_size;
+    int initial_tiling_offset_y = offset_y;
 
     int tiling_offset_x = offset_x;
     int tiling_offset_y = offset_y;
 
-    for(int x = 0; x < 8; x++)
+    for(int y = 0; y < 8; y++)
     {
-        tiling_offset_x = initial_tiling_offset_x + x * half_tile;
-        tiling_offset_y = initial_tiling_offset_y + x * half_tile;
+        tiling_offset_x = initial_tiling_offset_x + y * half_tile;
+        tiling_offset_y = initial_tiling_offset_y + y * half_tile;
 
-        for(int y = 0; y < 8; y++)
+        for(int x = 0; x < 8; x++)
         {
             int position_x = x * half_tile;
             int position_y = y * half_tile;
 
-            int iso_x = tiling_offset_x - position_y;
-            int iso_y = tiling_offset_y + y * half_tile;
+            //int iso_x = tiling_offset_x - position_y;
+            //int iso_y = tiling_offset_y + y * half_tile;
+            int iso_x = tiling_offset_x + x * half_tile;
+            int iso_y = tiling_offset_y - position_x;
 
             int offset = x * y;
 
@@ -48,7 +54,7 @@ void render_map_block(int x, int y, int offset_x, int offset_y)
                     WHITE);
 
             // Debug Circle
-            //DrawCircleLines(destRec.x, destRec.y, 1.0f, RED);
+            DrawCircleLines(destRec.x, destRec.y, 1.0f, RED);
         }
     }
 }
@@ -88,22 +94,22 @@ int main()
         int player_block_y = player_location_y / 8;
 
         // Top
-        render_map_block(player_block_x, player_block_y - 1, half_screen_width + 44 * 4 * 1, half_screen_height - 44 * 4 * 1);
-        render_map_block(player_block_x - 1, player_block_y - 1, half_screen_width, half_screen_height - 44 * 4 * 2);
-        render_map_block(player_block_x + 1, player_block_y - 1, half_screen_width + 44 * 4 * 2, half_screen_height);
+        //render_map_block(player_block_x, player_block_y - 1, half_screen_width + 44 * 4 * 1, half_screen_height - 44 * 4 * 1);
+        //render_map_block(player_block_x - 1, player_block_y - 1, half_screen_width, half_screen_height - 44 * 4 * 2);
+        //render_map_block(player_block_x + 1, player_block_y - 1, half_screen_width + 44 * 4 * 2, half_screen_height);
         
         // Middle
         render_map_block(player_block_x, player_block_y, half_screen_width, half_screen_height);
-        render_map_block(player_block_x - 1, player_block_y, half_screen_width - 44 * 4 * 1, half_screen_height - 44 * 4 * 1);
-        render_map_block(player_block_x - 2, player_block_y, half_screen_width - 44 * 4 * 2, half_screen_height - 44 * 4 * 2);
-        render_map_block(player_block_x + 1, player_block_y, half_screen_width + 44 * 4 * 1, half_screen_height + 44 * 4 * 1);
-        render_map_block(player_block_x + 2, player_block_y, half_screen_width + 44 * 4 * 2, half_screen_height + 44 * 4 * 2);
+        //render_map_block(player_block_x - 1, player_block_y, half_screen_width - 44 * 4 * 1, half_screen_height - 44 * 4 * 1);
+        //render_map_block(player_block_x - 2, player_block_y, half_screen_width - 44 * 4 * 2, half_screen_height - 44 * 4 * 2);
+        //render_map_block(player_block_x + 1, player_block_y, half_screen_width + 44 * 4 * 1, half_screen_height + 44 * 4 * 1);
+        //render_map_block(player_block_x + 2, player_block_y, half_screen_width + 44 * 4 * 2, half_screen_height + 44 * 4 * 2);
 
         // Bottom
-        render_map_block(player_block_x, player_block_y + 1, half_screen_width - 44 * 4 * 1, half_screen_height + 44 * 4 * 1);
-        render_map_block(player_block_x - 1, player_block_y + 1, half_screen_width - 44 * 4 * 2, half_screen_height);
-        render_map_block(player_block_x - 2, player_block_y + 1, half_screen_width - 44 * 4 * 3, half_screen_height - 44 * 4 * 1);
-        render_map_block(player_block_x + 1, player_block_y + 1, half_screen_width, half_screen_height + 44 * 4 * 2);
+        //render_map_block(player_block_x, player_block_y + 1, half_screen_width - 44 * 4 * 1, half_screen_height + 44 * 4 * 1);
+        //render_map_block(player_block_x - 1, player_block_y + 1, half_screen_width - 44 * 4 * 2, half_screen_height);
+        //render_map_block(player_block_x - 2, player_block_y + 1, half_screen_width - 44 * 4 * 3, half_screen_height - 44 * 4 * 1);
+        //render_map_block(player_block_x + 1, player_block_y + 1, half_screen_width, half_screen_height + 44 * 4 * 2);
 
         End3dMode();
 

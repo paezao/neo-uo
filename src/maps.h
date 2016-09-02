@@ -17,7 +17,8 @@ struct MulMapBlock
 
 struct Map0
 {
-    struct MulMapBlock blocks[768][512];
+    // 768x512
+    struct MulMapBlock blocks[393216];
 };
 
 struct Map0 * LoadMap0();

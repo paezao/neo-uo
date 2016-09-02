@@ -31,24 +31,24 @@ void DrawGroundTile(Texture2D texture, Rectangle sourceRec, Rectangle destRec, C
     rlColor4ub(tint.r, tint.g, tint.b, tint.a);
 
     // Bottom-left corner for texture and quad
-    // Left Tip
-    rlTexCoord2f((float)sourceRec.x / texture.width, (float)sourceRec.y / texture.height);
-    rlVertex3f(destRec.x - destRec.width / 2, destRec.y, -10.0f);
-
-    // Bottom-right corner for texture and quad
     // Bottom Tip
-    rlTexCoord2f((float)sourceRec.x / texture.width, (float)(sourceRec.y + sourceRec.height) / texture.height);
+    rlTexCoord2f((float)sourceRec.x / texture.width, (float)sourceRec.y / texture.height);
     rlVertex3f(destRec.x, destRec.y + destRec.height / 2, -10.0f);
 
-    // Top-right corner for texture and quad
+    // Bottom-right corner for texture and quad
     // Right Tip
-    rlTexCoord2f((float)(sourceRec.x + sourceRec.width) / texture.width, (float)(sourceRec.y + sourceRec.height) / texture.height);
+    rlTexCoord2f((float)sourceRec.x / texture.width, (float)(sourceRec.y + sourceRec.height) / texture.height);
     rlVertex3f(destRec.x + destRec.width / 2, destRec.y, -10.0f);
 
-    // Top-left corner for texture and quad
+    // Top-right corner for texture and quad
     // Top Tip
-    rlTexCoord2f((float)(sourceRec.x + sourceRec.width) / texture.width, (float)sourceRec.y / texture.height);
+    rlTexCoord2f((float)(sourceRec.x + sourceRec.width) / texture.width, (float)(sourceRec.y + sourceRec.height) / texture.height);
     rlVertex3f(destRec.x, destRec.y - destRec.width / 2, -10.0f);
+
+    // Top-left corner for texture and quad
+    // Left Tip
+    rlTexCoord2f((float)(sourceRec.x + sourceRec.width) / texture.width, (float)sourceRec.y / texture.height);
+    rlVertex3f(destRec.x - destRec.width / 2, destRec.y, -10.0f);
 
     rlEnd();
     rlPopMatrix();
