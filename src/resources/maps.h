@@ -1,5 +1,5 @@
-#ifndef __TILEMAPS_H__
-#define __TILEMAPS_H__
+#ifndef __MAPS_H__
+#define __MAPS_H__
 
 #include <stdint.h>
 
@@ -12,12 +12,12 @@ struct Tile
     int8_t z;
 };
 
-struct TileMap
+struct Map
 {
     struct Tile tiles[MAP_WIDTH_IN_TILES][MAP_HEIGHT_IN_TILES];    
 };
 
-void LoadTileMap(struct TileMap * tilemap);
-void DrawTileMap(struct TileMap * tilemap, int x, int y, int radius);
+void LoadMap(struct Map * map);
+void DrawMap(struct Map * map, int x, int y, int radius);
 
 #endif

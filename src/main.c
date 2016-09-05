@@ -1,27 +1,27 @@
 #include "raylib.h"
-#include "tilemap.h"
 #include "misc.h"
-#include "mul_land.h"
+#include "resources/maps.h"
+#include "resources/art.h"
 #include <stdlib.h>
 
-struct TileMap tilemap;
+struct Map map;
 
 int main()
 {
     InitWindow(800, 450, "Neo UO");
     SetTargetFPS(60);
 
-    LoadTileMap(&tilemap);
+    LoadMap(&map);
 
     int player_location_x = 1323;
     int player_location_y = 1624;
 
     while(!WindowShouldClose())
     {
-        if (IsKeyDown(KEY_RIGHT)) player_location_x += 1;
-        if (IsKeyDown(KEY_LEFT)) player_location_x -= 1;
-        if (IsKeyDown(KEY_UP)) player_location_y -= 1;
-        if (IsKeyDown(KEY_DOWN)) player_location_y += 1;
+        if (IsKeyDown(KEY_RIGHT)) { player_location_x += 1; player_location_y -= 1; }
+        if (IsKeyDown(KEY_LEFT)) { player_location_x -= 1; player_location_y += 1; }
+        if (IsKeyDown(KEY_UP)) { player_location_y -= 1; player_location_x -= 1; }
+        if (IsKeyDown(KEY_DOWN)) { player_location_y += 1; player_location_x += 1; }
 
         BeginDrawing();
 
@@ -29,7 +29,7 @@ int main()
         BeginBlendMode(BLEND_ALPHA);
 
         Begin3dOrthoMode();
-        DrawTileMap(&tilemap, player_location_x, player_location_y, 12);
+        DrawMap(&map, player_location_x, player_location_y, 12);
         End3dMode();
 
         DrawFPS(10, 10);
@@ -37,7 +37,7 @@ int main()
         EndDrawing();
     }
 
-    unload_land_textures();
+    UnloadLandTextures();
 
     CloseWindow();
 

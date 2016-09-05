@@ -1,10 +1,13 @@
-#include "tilemap.h"
-#include "misc.h"
-#include "mul_land.h"
+#include "maps.h"
+#include "art.h"
+#include "../misc.h"
 #include <stdio.h>
+#include <string.h>
 
-void LoadTileMap(struct TileMap * tilemap)
+void LoadMap(struct Map * map)
 {
+    memset(map, 0, sizeof(struct Map));
+
     int width_in_blocks = 896;
     int height_in_blocks = 512;
     int nr_of_blocks = width_in_blocks * height_in_blocks;
@@ -31,7 +34,7 @@ void LoadTileMap(struct TileMap * tilemap)
                     struct Tile tile;
                     fread(&tile.texture_id, sizeof(uint16_t), 1, fp);
                     fread(&tile.z, sizeof(int8_t), 1, fp);
-                    tilemap->tiles[tile_x_offset + x][tile_y_offset + y] = tile;
+                    map->tiles[tile_x_offset + x][tile_y_offset + y] = tile;
                 }
             }
         }
@@ -39,7 +42,7 @@ void LoadTileMap(struct TileMap * tilemap)
     fclose(fp);
 }
 
-void DrawTileMap(struct TileMap * tilemap, int x, int y, int radius)
+void DrawMap(struct Map * map, int x, int y, int radius)
 {
     int init_x = x - radius;
     int init_y = y - radius;
@@ -51,7 +54,7 @@ void DrawTileMap(struct TileMap * tilemap, int x, int y, int radius)
     int anchor_x = GetScreenWidth() / 2;
     int anchor_y = GetScreenHeight() / 2 + 100;
 
-    Texture2D texture;
+    Texture2D * texture;
 
     for(int y = init_y; y <= end_y; y++)
     {
@@ -66,7 +69,8 @@ void DrawTileMap(struct TileMap * tilemap, int x, int y, int radius)
                 continue;
             }
 
-            texture = get_land_texture(tilemap->tiles[x][y].texture_id);
+            texture = GetLandTexture(map->tiles[x][y].texture_id);
+            if (texture->width == 0) continue;
 
             Rectangle sourceRec = {0, 0, tile_width, tile_height};
             Rectangle destRec = {plot_x, 
@@ -74,7 +78,7 @@ void DrawTileMap(struct TileMap * tilemap, int x, int y, int radius)
                 tile_width, 
                 tile_height};
 
-            DrawLand(texture,
+            DrawLand(*texture,
                     sourceRec,
                     destRec,
                     WHITE);

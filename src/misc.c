@@ -30,21 +30,17 @@ void DrawLand(Texture2D texture, Rectangle sourceRec, Rectangle destRec, Color t
     rlBegin(RL_QUADS);
     rlColor4ub(tint.r, tint.g, tint.b, tint.a);
 
-    // Bottom-left corner for texture and quad
-    rlTexCoord2f((float)sourceRec.x / texture.width, (float)sourceRec.y / texture.height);
-    rlVertex3f(destRec.x - destRec.width / 2, destRec.y + destRec.height / 2, -10.0f);
+    rlTexCoord2f(0,0);
+    rlVertex3f((destRec.x - destRec.width / 2) + 0.5f, (destRec.y - destRec.height / 2) + 0.5f, -10.0f);
 
-    // Bottom-right corner for texture and quad
-    rlTexCoord2f((float)sourceRec.x / texture.width, (float)(sourceRec.y + sourceRec.height) / texture.height);
-    rlVertex3f(destRec.x + destRec.width / 2, destRec.y + destRec.height / 2, -10.0f);
+    rlTexCoord2f(0,1);
+    rlVertex3f((destRec.x - destRec.width / 2) + 0.5f, (destRec.y + destRec.height / 2) + 0.5f, -10.0f);
+    
+    rlTexCoord2f(1,1);
+    rlVertex3f((destRec.x + destRec.width / 2) + 0.5f, (destRec.y + destRec.height / 2) + 0.5f, -10.0f);
 
-    // Top-right corner for texture and quad
-    rlTexCoord2f((float)(sourceRec.x + sourceRec.width) / texture.width, (float)(sourceRec.y + sourceRec.height) / texture.height);
-    rlVertex3f(destRec.x + destRec.width / 2, destRec.y - destRec.height / 2, -10.0f);
-
-    // Top-left corner for texture and quad
-    rlTexCoord2f((float)(sourceRec.x + sourceRec.width) / texture.width, (float)sourceRec.y / texture.height);
-    rlVertex3f(destRec.x - destRec.width / 2, destRec.y - destRec.height / 2, -10.0f);
+    rlTexCoord2f(1,0);
+    rlVertex3f((destRec.x + destRec.width / 2) + 0.5f, (destRec.y - destRec.height / 2) + 0.5f, -10.0f);
 
     rlEnd();
     rlPopMatrix();

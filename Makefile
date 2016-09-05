@@ -1,4 +1,5 @@
-SRC=src/*.c
+SRC=src/*.c \
+	src/resources/*.c
 BIN=uo
 
 all:
