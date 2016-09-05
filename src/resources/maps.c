@@ -70,7 +70,7 @@ void DrawMap(struct Map * map, int x, int y, int radius)
             }
 
             texture = GetLandTexture(map->tiles[x][y].texture_id);
-            if (texture->width == 0) continue;
+            if (texture->id == 0) continue;
 
             Rectangle sourceRec = {0, 0, tile_width, tile_height};
             Rectangle destRec = {plot_x, 

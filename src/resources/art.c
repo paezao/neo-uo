@@ -13,7 +13,7 @@ void UnloadLandTextures()
 {
     for(int i = 0; i < 0x3FFF; i++)
     {
-        if(textures[i].width > 0)
+        if(textures[i].id > 0)
         {
             UnloadTexture(textures[i]);
         }
