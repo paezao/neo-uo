@@ -5,6 +5,7 @@
 #include "rlgl.h"
 
 void Begin3dOrthoMode();
-void DrawGroundTile(Texture2D texture, Rectangle sourceRec, Rectangle destRec, Color tint);
+void DrawTexMap(Texture2D texture, Rectangle sourceRec, Rectangle destRec, Color tint);
+void DrawLand(Texture2D texture, Rectangle sourceRec, Rectangle destRec, Color tint);
 
 #endif

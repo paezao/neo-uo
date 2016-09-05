@@ -17,4 +17,6 @@ struct MulTexMap
     uint8_t *data;
 };
 
+struct MulIndexEntry get_mul_index(char *path, int index);
+
 #endif

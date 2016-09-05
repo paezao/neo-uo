@@ -22,5 +22,6 @@ struct Map0
 };
 
 struct Map0 * LoadMap0();
+struct MulMapBlock LoadMapBlock(int x, int y);
 
 #endif

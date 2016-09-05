@@ -8,7 +8,9 @@ struct Map0 * LoadMap0()
 
     FILE *fp = fopen("tmp/map0.mul", "r");
 
-    for (int i = 0; i < 393216; i++)
+    int nr_of_blocks = 896 * 512;
+
+    for (int i = 0; i < nr_of_blocks; i++)
     {
         struct MulMapBlock block;
         fread(&block.header, sizeof(int32_t), 1, fp); // Read Header
@@ -27,4 +29,29 @@ struct Map0 * LoadMap0()
     fclose(fp);
 
     return map;
+}
+
+struct MulMapBlock LoadMapBlock(int x, int y)
+{
+    struct MulMapBlock block;
+
+    int block_nr = (x * 512) + y;
+    int nr_of_blocks = 896 * 512;
+
+    FILE *fp = fopen("tmp/map0.mul", "r");
+    fseek(fp, block_nr * 196, SEEK_SET);
+
+    fread(&block.header, sizeof(int32_t), 1, fp); // Read Header
+
+    for(int j = 0; j < 64; j++)
+    {
+        struct MulMapCell cell;
+        fread(&cell.tile_id, sizeof(uint16_t), 1, fp);
+        fread(&cell.z, sizeof(int8_t), 1, fp);
+        block.cells[j] = cell;
+    }
+
+    fclose(fp);
+
+    return block;
 }
