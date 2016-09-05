@@ -3,6 +3,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void unload_land_textures()
+{
+    for(int i = 0; i < 0x10000; i++)
+    {
+        if(land_textures[i].width > 0)
+        {
+            UnloadTexture(land_textures[i]);
+        }
+    }
+}
+
 Texture2D get_land_texture(int index)
 {
     if(land_textures[index].width == 0)

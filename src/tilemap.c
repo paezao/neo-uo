@@ -45,6 +45,8 @@ void DrawTileMap(struct TileMap * tilemap, int x, int y, int radius)
     int init_y = y - radius;
     int end_x = x + radius;
     int end_y = y + radius;
+    int tile_width = 44;
+    int tile_height = 44;
 
     int anchor_x = GetScreenWidth() / 2;
     int anchor_y = GetScreenHeight() / 2 + 100;
@@ -55,16 +57,22 @@ void DrawTileMap(struct TileMap * tilemap, int x, int y, int radius)
     {
         for(int x = init_x; x <= end_x; x++)
         {
+            int plot_x = anchor_x + (((x - init_x) - (y - init_y)) * tile_width / 2);
+            int plot_y = (((x - init_x) + (y - init_y)) * tile_height / 2) - anchor_y;
+
+            if(plot_x < (- 2 * tile_width) || plot_x > GetScreenWidth() + (2 * tile_width) ||
+                    plot_y < (- 2 * tile_height) || plot_y > GetScreenHeight() + (2 * tile_height))
+            {
+                continue;
+            }
+
             texture = get_land_texture(tilemap->tiles[x][y].texture_id);
 
-            int plot_x = anchor_x + (((x - init_x) - (y - init_y)) * texture.width / 2);
-            int plot_y = (((x - init_x) + (y - init_y)) * texture.height / 2) - anchor_y;
-
-            Rectangle sourceRec = {0, 0, texture.width, texture.height};
+            Rectangle sourceRec = {0, 0, tile_width, tile_height};
             Rectangle destRec = {plot_x, 
                 plot_y, 
-                texture.width, 
-                texture.height};
+                tile_width, 
+                tile_height};
 
             DrawLand(texture,
                     sourceRec,

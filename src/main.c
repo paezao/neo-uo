@@ -2,6 +2,7 @@
 #include "tilemap.h"
 #include "misc.h"
 #include "mul_land.h"
+#include <stdlib.h>
 
 struct TileMap tilemap;
 
@@ -35,6 +36,10 @@ int main()
 
         EndDrawing();
     }
+
+    unload_land_textures();
+
+    CloseWindow();
 
     return 0;
 }
