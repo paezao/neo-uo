@@ -1,45 +1,84 @@
-#include "raylib.h"
-#include "misc.h"
-#include "resources/maps.h"
-#include "resources/art.h"
-#include <stdlib.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <dlfcn.h>
+#include "game/game.h"
 
-struct Map map;
+const char *GAME_LIBRARY = "./bin/libgame.so";
 
-int main()
+struct game
 {
-    InitWindow(800, 450, "Neo UO");
-    SetTargetFPS(60);
+    void *handle;
+    ino_t id;
+    struct game_api api;
+    struct game_state *state;
+};
 
-    LoadMap(&map);
-
-    int player_location_x = 1323;
-    int player_location_y = 1624;
-
-    while(!WindowShouldClose())
+static void game_load(struct game *game)
+{
+    struct stat attr;
+    if((stat(GAME_LIBRARY, &attr) == 0) && (game->id != attr.st_ino))
     {
-        if (IsKeyDown(KEY_RIGHT)) { player_location_x += 1; player_location_y -= 1; }
-        if (IsKeyDown(KEY_LEFT)) { player_location_x -= 1; player_location_y += 1; }
-        if (IsKeyDown(KEY_UP)) { player_location_y -= 1; player_location_x -= 1; }
-        if (IsKeyDown(KEY_DOWN)) { player_location_y += 1; player_location_x += 1; }
+        if(game->handle)
+        {
+            game->api.unload(game->state);
+            dlclose(game->handle);
+        }
 
-        BeginDrawing();
+        void *handle = dlopen(GAME_LIBRARY, RTLD_NOW);
+        if(handle)
+        {
+            game->handle = handle;
+            game->id = attr.st_ino;
+            const struct game_api *api = dlsym(game->handle, "GAME_API");
 
-        ClearBackground(BLACK);
-        BeginBlendMode(BLEND_ALPHA);
+            if(api != NULL)
+            {
+                game->api = *api;
+                if(game->state == NULL)
+                    game->state = game->api.init();
+                game->api.reload(game->state);
+            }
+            else
+            {
+                dlclose(game->handle);
+                game->handle = NULL;
+                game->id = 0;
+            }
+        }
+        else
+        {
+            game->handle = NULL;
+            game->id = 0;
+        }
+    }
+}
 
-        Begin3dOrthoMode();
-        DrawMap(&map, player_location_x, player_location_y, 12);
-        End3dMode();
+void game_unload(struct game *game)
+{
+    if(game->handle)
+    {
+        game->api.finalize(game->state);
+        game->state = NULL;
+        dlclose(game->handle);
+        game->handle = NULL;
+        game->id = 0;
+    }
+}
 
-        DrawFPS(10, 10);
+int main(void)
+{
+    struct game game = {0};
 
-        EndDrawing();
+    for(;;)
+    {
+        game_load(&game);
+        if(game.handle)
+            if(!game.api.step(game.state))
+                break;
     }
 
-    UnloadLandTextures();
-
-    CloseWindow();
+    game_unload(&game);
 
     return 0;
 }
