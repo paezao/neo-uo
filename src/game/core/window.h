@@ -4,15 +4,17 @@
 #include <GLFW/glfw3.h>
 #include <stdbool.h>
 
-struct Window
+typedef struct Window
 {
     GLFWwindow *handle;
     int width;
     int height;
-};
+    int viewport_width;
+    int viewport_height;
+} Window;
 
-struct Window * open_window(int width, int height, char * title);
-void close_window(struct Window * window);
-bool window_should_close(struct Window * window);
+Window * open_window(int width, int height, char * title);
+void close_window(Window * window);
+bool window_should_close(Window * window);
 
 #endif

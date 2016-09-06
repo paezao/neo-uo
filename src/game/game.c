@@ -20,17 +20,19 @@ static struct game_state *game_init()
 
 static void game_finalize(struct game_state *state)
 {
+    printf("Finalizing Game\n");
     close_window(state->window);
     free(state);
 }
 
 static void game_reload(struct game_state *state)
 {
-
+    printf("Reloading Game\n");
 }
 
 static void game_unload(struct game_state *state)
 {
+    printf("Unloading Game\n");
 }
 
 static bool game_step(struct game_state *state)
@@ -45,9 +47,10 @@ static bool game_step(struct game_state *state)
 
     clear_background(BLACK);
 
-    //begin_3d(state->window);
-    draw_quad(RED);
-    //end_3d();
+    begin_3d(state->window);
+    Point2D pos = {state->window->viewport_width / 2, state->window->viewport_height / 2};
+    draw_rectangle(pos, 44.0f, 44.0f, RED);
+    end_3d();
 
     end_drawing(state->window);
 

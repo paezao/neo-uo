@@ -1,11 +1,12 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "window.h"
 
-struct Window * open_window(int width, int height, char * title)
+Window * open_window(int width, int height, char * title)
 {
     glfwInit();
 
-    struct Window * window = (struct Window *)malloc(sizeof(struct Window));
+    Window * window = (Window *)malloc(sizeof(Window));
 
     window->handle = glfwCreateWindow(width, height, title, NULL, NULL);
     window->width = width;
@@ -17,17 +18,20 @@ struct Window * open_window(int width, int height, char * title)
     glfwGetFramebufferSize(window->handle, &viewport_width, &viewport_height);
     glViewport(0, 0, viewport_width, viewport_height);
 
+    window->viewport_width = viewport_width;
+    window->viewport_height = viewport_height;
+
     return window;
 }
 
-void close_window(struct Window * window)
+void close_window(Window * window)
 {
     glfwDestroyWindow(window->handle);
     glfwTerminate();
     free(window);
 }
 
-bool window_should_close(struct Window * window)
+bool window_should_close(Window * window)
 {
     return glfwWindowShouldClose(window->handle);
 }
