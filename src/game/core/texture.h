@@ -1,5 +1,5 @@
-#ifndef _TEXTURE_H_
-#define _TEXTURE_H_
+#ifndef _CORE_TEXTURE_H_
+#define _CORE_TEXTURE_H_
 
 #include "types.h"
 
@@ -11,5 +11,6 @@ typedef struct Texture
 } Texture;
 
 Texture * load_texture(void *data, uint32 width, uint32 height);
+void unload_texture(Texture *texture);
 
 #endif

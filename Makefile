@@ -1,8 +1,9 @@
-CFLAGS=-std=c99 -Wall -g -fPIC -pedantic -O2
+CFLAGS=-std=c99 -Wall -g -fPIC -pedantic
 LDLIBS=-lglfw3 -ldl -framework OpenGL
 SRC_MAIN=src/main.c
 SRC_GAME=src/game/*.c \
-		 src/game/core/*.c
+		 src/game/core/*.c \
+		 src/game/resources/*.c
 
 all: game libgame.so
 

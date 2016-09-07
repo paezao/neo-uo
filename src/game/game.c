@@ -4,10 +4,13 @@
 #include "core/window.h"
 #include "core/drawing.h"
 #include "core/input.h"
+#include "core/texture.h"
+#include "resources/art.h"
 
 struct game_state
 {
-    struct Window * window;
+    Window * window;
+    Texture * texture;
 };
 
 static struct game_state *game_init()
@@ -15,6 +18,7 @@ static struct game_state *game_init()
     printf("Initializing Game\n");
     struct game_state *state = malloc(sizeof(*state));
     state->window = open_window(800, 450, "Neo UO");
+    state->texture = load_land_texture(10);
     return state;
 }
 
@@ -45,11 +49,13 @@ static bool game_step(struct game_state *state)
 
     begin_drawing(state->window);
 
-    clear_background(BLACK);
+    clear_background(WHITE);
 
     begin_3d(state->window);
-    Point2D pos = {state->window->viewport_width / 2, state->window->viewport_height / 2};
-    draw_rectangle(pos, 44.0f, 44.0f, RED);
+    Rect rect = {state->window->viewport_width / 2, 
+        state->window->viewport_height / 2,
+        44.0f, 44.0f};
+    draw_rectangle(rect, state->texture, BLUE);
     end_3d();
 
     end_drawing(state->window);

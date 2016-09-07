@@ -17,25 +17,46 @@ void clear_background(Color color)
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void draw_rectangle(Point2D position, float width, float height, Color color)
+void draw_rectangle(Rect rect, Texture *texture, Color color)
 {
+    if(texture) 
+    {
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture( GL_TEXTURE_2D, texture->id );
+    }
+
+    glPushMatrix();
+
     glBegin(GL_QUADS);
 
     glColor4ub(color.red, color.green, color.blue, color.alpha);
 
     // Top Left
-    glVertex3f(position.x - width / 2, position.y - height / 2, 0.0f);
-
-    // Top Right
-    glVertex3f(position.x + width / 2, position.y - height / 2, 0.0f);
-
-    // Bottom Right
-    glVertex3f(position.x + width / 2, position.y + height / 2, 0.0f);
+    if(texture) glTexCoord2f( 0.f, 0.f );
+    glVertex3f(rect.x - rect.width / 2, rect.y - rect.height / 2, 0.0f);
 
     // Bottom Left
-    glVertex3f(position.x - width / 2, position.y + height / 2, 0.0f);
+    if(texture) glTexCoord2f( 0.f, 1.f );
+    glVertex3f(rect.x - rect.width / 2, rect.y + rect.height / 2, 0.0f);
+
+    // Bottom Right
+    if(texture) glTexCoord2f( 1.f, 1.f );
+    glVertex3f(rect.x + rect.width / 2, rect.y + rect.height / 2, 0.0f);
+
+    // Top Right
+    if(texture) glTexCoord2f( 1.f, 0.f );
+    glVertex3f(rect.x + rect.width / 2, rect.y - rect.height / 2, 0.0f);
+
 
     glEnd();
+
+    glPopMatrix();
+
+    if(texture)
+    {
+        glDisable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
 }
 
 void begin_3d(struct Window * window)

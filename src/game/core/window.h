@@ -1,5 +1,5 @@
-#ifndef _WINDOW_H_
-#define _WINDOW_H_
+#ifndef _CORE_WINDOW_H_
+#define _CORE_WINDOW_H_
 
 #include <GLFW/glfw3.h>
 #include <stdbool.h>

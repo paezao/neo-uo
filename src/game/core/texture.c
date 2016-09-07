@@ -23,3 +23,12 @@ Texture * load_texture(void *data, uint32 width, uint32 height)
 
     return texture;
 }
+
+void unload_texture(Texture *texture)
+{
+    if(texture->id)
+    {
+        glDeleteTextures(1, &texture->id);
+    }
+    free(texture);
+}

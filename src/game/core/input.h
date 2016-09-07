@@ -1,5 +1,5 @@
-#ifndef _INPUT_H_
-#define _INPUT_H_
+#ifndef _CORE_INPUT_H_
+#define _CORE_INPUT_H_
 
 #include <GLFW/glfw3.h>
 #include <stdbool.h>

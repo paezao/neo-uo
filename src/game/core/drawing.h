@@ -1,8 +1,9 @@
-#ifndef _DRAWING_H_
-#define _DRAWING_H_
+#ifndef _CORE_DRAWING_H_
+#define _CORE_DRAWING_H_
 
 #include <GLFW/glfw3.h>
 #include "window.h"
+#include "texture.h"
 
 typedef struct Color 
 {
@@ -12,12 +13,15 @@ typedef struct Color
     unsigned char alpha;
 } Color;
 
-typedef struct Point2D
+typedef struct Rect
 {
     float x;
     float y;
-} Point2D;
+    float width;
+    float height;
+} Rect;
 
+#define WHITE (Color){ 255, 255, 255, 255 }
 #define GRAY  (Color){ 130, 130, 130, 255 }
 #define BLACK (Color){ 0, 0, 0, 255 }
 #define RED   (Color){ 255, 0, 0, 255 }
@@ -27,7 +31,7 @@ typedef struct Point2D
 void begin_drawing(struct Window * window);
 void end_drawing(struct Window * window);
 void clear_background(Color color);
-void draw_rectangle(Point2D position, float width, float height, Color color);
+void draw_rectangle(Rect rect, Texture *texture, Color color);
 void begin_3d(struct Window * window);
 void end_3d();
 
