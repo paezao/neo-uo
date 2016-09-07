@@ -38,19 +38,19 @@ void draw_rectangle(Rect rect, Texture *texture, Color color)
 
     // Top Left
     if(texture) glTexCoord2f( 0.f, 0.f );
-    glVertex3f(rect.x - rect.width / 2, rect.y - rect.height / 2, 0.0f);
+    glVertex3f(rect.x - rect.width / 2, rect.y - rect.height / 2, -10.0f);
 
     // Bottom Left
     if(texture) glTexCoord2f( 0.f, 1.f );
-    glVertex3f(rect.x - rect.width / 2, rect.y + rect.height / 2, 0.0f);
+    glVertex3f(rect.x - rect.width / 2, rect.y + rect.height / 2, -10.0f);
 
     // Bottom Right
     if(texture) glTexCoord2f( 1.f, 1.f );
-    glVertex3f(rect.x + rect.width / 2, rect.y + rect.height / 2, 0.0f);
+    glVertex3f(rect.x + rect.width / 2, rect.y + rect.height / 2, -10.0f);
 
     // Top Right
     if(texture) glTexCoord2f( 1.f, 0.f );
-    glVertex3f(rect.x + rect.width / 2, rect.y - rect.height / 2, 0.0f);
+    glVertex3f(rect.x + rect.width / 2, rect.y - rect.height / 2, -10.0f);
 
 
     glEnd();

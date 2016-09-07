@@ -1,7 +1,7 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
-#include <stdbool.h>
+#include "core/types.h"
 
 struct game_state;
 

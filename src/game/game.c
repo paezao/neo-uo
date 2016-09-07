@@ -2,15 +2,16 @@
 #include <stdlib.h>
 #include "game.h"
 #include "core/window.h"
-#include "core/drawing.h"
 #include "core/input.h"
-#include "core/texture.h"
-#include "resources/art.h"
+#include "resources/map.h"
+#include "world.h"
 
 struct game_state
 {
     Window * window;
-    Texture * texture;
+    Map * map;
+    int player_x;
+    int player_y;
 };
 
 static struct game_state *game_init()
@@ -18,7 +19,9 @@ static struct game_state *game_init()
     printf("Initializing Game\n");
     struct game_state *state = malloc(sizeof(*state));
     state->window = open_window(800, 450, "Neo UO");
-    state->texture = load_land_texture(10);
+    state->map = load_map();
+    state->player_x = 1323;
+    state->player_y = 1624;
     return state;
 }
 
@@ -26,6 +29,7 @@ static void game_finalize(struct game_state *state)
 {
     printf("Finalizing Game\n");
     close_window(state->window);
+    free(state->map);
     free(state);
 }
 
@@ -52,10 +56,7 @@ static bool game_step(struct game_state *state)
     clear_background(BLACK);
 
     begin_3d(state->window);
-    Rect rect = {state->window->width / 2, 
-        state->window->height / 2,
-        44.0f, 44.0f};
-    draw_rectangle(rect, state->texture, WHITE);
+    draw_world(state->window, state->map, state->player_x, state->player_y, 15);
     end_3d();
 
     end_drawing(state->window);
