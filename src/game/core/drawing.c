@@ -27,6 +27,11 @@ void draw_rectangle(Rect rect, Texture *texture, Color color)
 
     glPushMatrix();
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glScalef(1.0f, 1.0f, 1.0f);
+
     glBegin(GL_QUADS);
 
     glColor4ub(color.red, color.green, color.blue, color.alpha);
@@ -65,7 +70,7 @@ void begin_3d(struct Window * window)
     glPushMatrix();
     glLoadIdentity();
 
-    glOrtho(0, window->viewport_width, window->viewport_height, 0, -1000.0f, 1000.0f);
+    glOrtho(0, window->width, window->height, 0, -1000.0f, 1000.0f);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();

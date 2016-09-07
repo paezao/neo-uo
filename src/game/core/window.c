@@ -18,9 +18,6 @@ Window * open_window(int width, int height, char * title)
     glfwGetFramebufferSize(window->handle, &viewport_width, &viewport_height);
     glViewport(0, 0, viewport_width, viewport_height);
 
-    window->viewport_width = viewport_width;
-    window->viewport_height = viewport_height;
-
     return window;
 }
 

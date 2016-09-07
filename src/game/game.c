@@ -49,13 +49,13 @@ static bool game_step(struct game_state *state)
 
     begin_drawing(state->window);
 
-    clear_background(WHITE);
+    clear_background(BLACK);
 
     begin_3d(state->window);
-    Rect rect = {state->window->viewport_width / 2, 
-        state->window->viewport_height / 2,
+    Rect rect = {state->window->width / 2, 
+        state->window->height / 2,
         44.0f, 44.0f};
-    draw_rectangle(rect, state->texture, BLUE);
+    draw_rectangle(rect, state->texture, WHITE);
     end_3d();
 
     end_drawing(state->window);

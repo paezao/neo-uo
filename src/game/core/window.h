@@ -9,8 +9,6 @@ typedef struct Window
     GLFWwindow *handle;
     int width;
     int height;
-    int viewport_width;
-    int viewport_height;
 } Window;
 
 Window * open_window(int width, int height, char * title);
