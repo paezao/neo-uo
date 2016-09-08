@@ -19,7 +19,7 @@ static struct game_state *game_init()
 {
     printf("Initializing Game\n");
     struct game_state *state = malloc(sizeof(*state));
-    state->window = open_window(800, 450, "Neo UO");
+    state->window = open_window(1280, 720, "Neo UO");
     state->map = load_map();
     state->player_x = 1323;
     state->player_y = 1624;
@@ -54,16 +54,7 @@ static bool game_step(struct game_state *state)
 
     begin_3d(state->window);
 
-    draw_world(state->window, state->map, state->player_x, state->player_y, 15);
-
-    Texture *static_texture = get_static_texture(938);
-
-    Rect rect2 = {state->player_x, 
-        state->player_y, 
-        static_texture->width, 
-        static_texture->height};
-
-    draw_rectangle(rect2, static_texture, WHITE);
+    draw_world(state->window, state->map, state->player_x, state->player_y, 22);
 
     end_3d();
 

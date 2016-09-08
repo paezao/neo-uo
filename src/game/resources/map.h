@@ -8,13 +8,20 @@
 
 typedef struct Tile
 {
-    uint16_t texture_id; 
-    int8_t z;
+    uint16 texture_id; 
+    int8 z;
 } Tile;
+
+typedef struct Static
+{
+    uint16 texture_id; 
+    int8 z;
+} Static;
 
 typedef struct Map
 {
     struct Tile tiles[MAP_WIDTH_IN_TILES][MAP_HEIGHT_IN_TILES];    
+    struct Static statics[MAP_WIDTH_IN_TILES][MAP_HEIGHT_IN_TILES];    
 } Map;
 
 Map * load_map();

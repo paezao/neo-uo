@@ -12,11 +12,6 @@ static Texture * load_land_texture(int index)
     FILE *art_fp = fopen("tmp/art.mul", "r");
     fseek(art_fp, index_entry.lookup, SEEK_SET);
 
-    /*
-    int32 flag;
-    fread(&flag, sizeof(int32), 1, art_fp);
-    */
-
     uint8 *pixels;
 
     pixels = (uint8 *)malloc(7744); // 44x44 tiles x 32bits
@@ -90,7 +85,8 @@ void unload_land_textures()
 
 static Texture * load_static_texture(int index)
 {
-    IndexEntry index_entry = get_index_entry("tmp/staidx0.mul", index);
+    index += 0x4000;
+    IndexEntry index_entry = get_index_entry("tmp/artidx.mul", index);
 
     FILE *art_fp = fopen("tmp/art.mul", "r");
     fseek(art_fp, index_entry.lookup, SEEK_SET);
@@ -98,26 +94,27 @@ static Texture * load_static_texture(int index)
     int32 header;
     fread(&header, sizeof(int32), 1, art_fp);
 
-    int16 width, height;
-    fread(&width, sizeof(int32), 1, art_fp);
-    fread(&height, sizeof(int32), 1, art_fp);
+    uint16 width, height;
+    fread(&width, sizeof(uint16), 1, art_fp);
+    fread(&height, sizeof(uint16), 1, art_fp);
 
-    int16 *lookup_table = (int16 *)malloc(sizeof(int16) * height);
-    fread(lookup_table, sizeof(int16), height, art_fp);
+    uint16 *lookup_table = (uint16 *)malloc(sizeof(uint16) * height);
+    fread(lookup_table, sizeof(uint16), height, art_fp);
 
     int pixels_size = width * height * sizeof(uint32);
     uint8 *pixels = (uint8 *)malloc(pixels_size);
     memset(pixels, 0, pixels_size);
 
     int data_start = ftell(art_fp);
-    int x, y = 0;
+    uint16 x = 0;
+    int y = 0;
 
     fseek(art_fp, data_start + lookup_table[y] * 2, SEEK_SET);
     while(y < height)
     {
-        int32 offset, run;
-        fread(&offset, sizeof(int32), 1, art_fp);
-        fread(&run, sizeof(int32), 1, art_fp);
+        uint16 offset, run;
+        fread(&offset, sizeof(uint16), 1, art_fp);
+        fread(&run, sizeof(uint16), 1, art_fp);
 
         if(offset == 0 && run == 0)
         {
@@ -130,14 +127,14 @@ static Texture * load_static_texture(int index)
             x += offset;
             for(int i=0; i < run; i++)
             {
-                int read_offset = y * width + i * 4;
-                uint16_t color16;
-                fread(&color16, sizeof(uint16_t), 1, art_fp);
+                uint16 pixel_offset = (y * width * 4) + (x * 4);
+                uint16 color16;
+                fread(&color16, sizeof(uint16), 1, art_fp);
 
-                pixels[read_offset] = (uint8_t)(((color16 & 0x7C00) >> 10) << 3);
-                pixels[read_offset + 1] = (uint8_t)(((color16 & 0x3E0) >> 5) << 3);
-                pixels[read_offset + 2] = (uint8_t)((color16 & 0x1F) << 3);
-                pixels[read_offset + 3] = (uint8_t)255;
+                pixels[pixel_offset] = (uint8)(((color16 & 0x7C00) >> 10) << 3);
+                pixels[pixel_offset + 1] = (uint8)(((color16 & 0x3E0) >> 5) << 3);
+                pixels[pixel_offset + 2] = (uint8)((color16 & 0x1F) << 3);
+                pixels[pixel_offset + 3] = (uint8)255;
 
                 x += 1;
             }
