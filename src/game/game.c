@@ -53,7 +53,18 @@ static bool game_step(struct game_state *state)
     clear_background(BLACK);
 
     begin_3d(state->window);
+
     draw_world(state->window, state->map, state->player_x, state->player_y, 15);
+
+    Texture *static_texture = get_static_texture(938);
+
+    Rect rect2 = {state->player_x, 
+        state->player_y, 
+        static_texture->width, 
+        static_texture->height};
+
+    draw_rectangle(rect2, static_texture, WHITE);
+
     end_3d();
 
     end_drawing(state->window);

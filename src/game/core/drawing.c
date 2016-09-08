@@ -4,11 +4,15 @@ void begin_drawing(struct Window * window)
 {
     glLoadIdentity();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void end_drawing(struct Window * window)
 {
     glfwSwapBuffers(window->handle);
+    glDisable(GL_BLEND);
 }
 
 void clear_background(Color color)
@@ -26,9 +30,6 @@ void draw_rectangle(Rect rect, Texture *texture, Color color)
     }
 
     glPushMatrix();
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glScalef(1.0f, 1.0f, 1.0f);
 
@@ -52,7 +53,6 @@ void draw_rectangle(Rect rect, Texture *texture, Color color)
     if(texture) glTexCoord2f( 1.f, 0.f );
     glVertex3f(rect.x + rect.width / 2, rect.y - rect.height / 2, -10.0f);
 
-
     glEnd();
 
     glPopMatrix();
@@ -74,8 +74,6 @@ void begin_3d(struct Window * window)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-
-    glEnable(GL_DEPTH_TEST);
 }
 
 void end_3d()
