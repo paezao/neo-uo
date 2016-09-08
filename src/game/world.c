@@ -12,7 +12,7 @@ void draw_world(Window *window, Map *map, int x, int y, int radius)
     int tile_height = 44;
 
     int anchor_x = window->width / 2;
-    int anchor_y = window->height;
+    int anchor_y = window->height / 2 - radius * tile_height;
 
     for(int y = init_y; y <= end_y; y++)
     {
@@ -20,8 +20,9 @@ void draw_world(Window *window, Map *map, int x, int y, int radius)
         {
             int tiles_x = x - init_x;
             int tiles_y = y - init_y;
+
             int plot_x = anchor_x + ((tiles_x - tiles_y) * tile_width / 2);
-            int plot_y = ((tiles_x + tiles_y) * tile_height / 2) - anchor_y;
+            int plot_y = anchor_y + ((tiles_x + tiles_y) * tile_height / 2);
 
             if(plot_x < (- 2 * tile_width) || plot_x > window->width + (2 * tile_width) ||
                     plot_y < (- 2 * tile_height) || plot_y > window->height + (2 * tile_height))
@@ -29,8 +30,8 @@ void draw_world(Window *window, Map *map, int x, int y, int radius)
                 continue;
             }
 
-            Texture *texture = load_land_texture(map->tiles[x][y].texture_id);
-            if (texture->id == 0) continue;
+            Texture *texture = get_land_texture(map->tiles[x][y].texture_id);
+            if (!texture) continue;
 
             Rect rect = {plot_x, 
                 plot_y, 
@@ -38,8 +39,6 @@ void draw_world(Window *window, Map *map, int x, int y, int radius)
                 tile_height};
 
             draw_rectangle(rect, texture, WHITE);
-
-            free(texture);
         }
     }
 }

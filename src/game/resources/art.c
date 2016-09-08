@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-Texture * load_land_texture(int index)
+static Texture * load_land_texture(int index)
 {
     IndexEntry index_entry = get_index_entry("tmp/artidx.mul", index);
 
@@ -71,4 +71,20 @@ Texture * load_land_texture(int index)
     free(pixels);
 
     return texture;
+}
+
+Texture * get_land_texture(int index)
+{
+    if(!land_textures[index])
+        land_textures[index] = load_land_texture(index);
+    return land_textures[index];
+}
+
+void unload_land_textures()
+{
+    for(int i=0; i < 0x3FFF; i++)
+    {
+        if(land_textures[i])
+            unload_texture(land_textures[i]);
+    }
 }

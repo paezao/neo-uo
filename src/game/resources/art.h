@@ -3,6 +3,9 @@
 
 #include "../core/texture.h"
 
-Texture * load_land_texture(int index);
+static Texture * land_textures[0x3FFF];
+
+Texture * get_land_texture(int index);
+void unload_land_textures();
 
 #endif

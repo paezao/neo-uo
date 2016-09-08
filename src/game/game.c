@@ -4,6 +4,7 @@
 #include "core/window.h"
 #include "core/input.h"
 #include "resources/map.h"
+#include "resources/art.h"
 #include "world.h"
 
 struct game_state
@@ -31,6 +32,7 @@ static void game_finalize(struct game_state *state)
     close_window(state->window);
     free(state->map);
     free(state);
+    unload_land_textures();
 }
 
 static void game_reload(struct game_state *state)
@@ -45,11 +47,6 @@ static void game_unload(struct game_state *state)
 
 static bool game_step(struct game_state *state)
 {
-    if(window_should_close(state->window) || 
-            is_key_down(state->window, KEY_ESCAPE))
-    {
-        return false;
-    }
 
     begin_drawing(state->window);
 
@@ -60,6 +57,17 @@ static bool game_step(struct game_state *state)
     end_3d();
 
     end_drawing(state->window);
+
+    if(window_should_close(state->window) || 
+            is_key_down(state->window, KEY_ESCAPE))
+    {
+        return false;
+    }
+
+    if(is_key_down(state->window, KEY_UP)) { state->player_x -= 1; state->player_y -= 1; }
+    if(is_key_down(state->window, KEY_DOWN)) { state->player_x += 1; state->player_y += 1; }
+    if(is_key_down(state->window, KEY_LEFT)) { state->player_x -= 1; state->player_y += 1; }
+    if(is_key_down(state->window, KEY_RIGHT)) { state->player_x += 1; state->player_y -= 1; }
 
     glfwPollEvents();
 
