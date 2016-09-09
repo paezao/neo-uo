@@ -24,26 +24,12 @@ void draw_world(Window *window, Map *map, int x, int y, int radius)
     {
         for(int x = init_x; x <= end_x; x++)
         {
-            // tile.y -= 4 * z
-            // tile.y -= (4 * z) + (4 * stackIndex) -> For items on ground
-            // for stretching you stretch the current tile to match z to the east, south east and south in UO coords
-            // east, south east and south
-            // then 3 of your 5 vertices render at the same Z (Y + offset)
-            // as those neighbors
-            
             int tiles_x = x - init_x;
             int tiles_y = y - init_y;
 
             int plot_x = anchor_x + ((tiles_x - tiles_y) * tile_width / 2);
             int plot_y = anchor_y + ((tiles_x + tiles_y) * tile_height / 2);
 
-            /*
-            if(plot_x < (- 2 * tile_width) || plot_x > window->width + (2 * tile_width) ||
-                    plot_y < (- 2 * tile_height) || plot_y > window->height + (2 * tile_height))
-            {
-                continue;
-            }
-            */
 
             Color color = WHITE;
             if(x == center_x && y == center_y) color = RED;
@@ -55,8 +41,13 @@ void draw_world(Window *window, Map *map, int x, int y, int radius)
 
             int land_z = (current_land_z - center_z) * 4;
 
-            if(map->tiles[x][y].texture_id < 3 || 
-                    (map->tiles[x][y].texture_id >= 0x1AF && map->tiles[x][y].texture_id <= 0x1B5)) continue;
+            /*
+            if(plot_x < (- 2 * tile_width) || plot_x > window->width + (2 * tile_width) ||
+                    (plot_y - land_z) < (- 2 * tile_height) || (plot_y - land_z) > window->height + (2 * tile_height))
+            {
+                continue;
+            }
+            */
 
             if((current_land_z != east_land_z ||
                     current_land_z != south_east_land_z ||
@@ -75,24 +66,34 @@ void draw_world(Window *window, Map *map, int x, int y, int radius)
             }
             else
             {
+                if(map->tiles[x][y].texture_id < 3 || 
+                        (map->tiles[x][y].texture_id >= 0x1AF && map->tiles[x][y].texture_id <= 0x1B5)) continue;
+
                 Texture *land_texture = get_land_texture(map->tiles[x][y].texture_id);
                 if (!land_texture) continue;
-
 
                 Rect land_rect = {plot_x, plot_y - land_z, tile_width, tile_height};
                 draw_rectangle(land_rect, land_texture, color);
             }
 
-            if(map->statics[x][y].texture_id == 0) continue;
+            Tile *tile = &map->tiles[x][y];
 
-            Texture *static_texture = get_static_texture(map->statics[x][y].texture_id);
-            if (!static_texture) continue;
+            for(int i=0; i < vector_total(&tile->statics); i++)
+            {
+                Static *_static = vector_get(&tile->statics, i);
 
-            int static_z = (map->statics[x][y].z - center_z) * 4;
+                if(_static->texture_id < 3) continue;
+                //if(_static->texture_id < 3 || (_static->texture_id >= 0x1AF && _static->texture_id <= 0x1B5)) continue;
 
-            int static_y_offset = (static_texture->height / 2) - (tile_height / 2);
-            Rect static_rect = {plot_x, plot_y - static_y_offset - static_z, static_texture->width, static_texture->height};
-            draw_rectangle(static_rect, static_texture, WHITE);
+                Texture *static_texture = get_static_texture(_static->texture_id);
+                if (!static_texture) continue;
+
+                int static_z = (_static->z - center_z) * 4;
+
+                int static_y_offset = (static_texture->height / 2) - (tile_height / 2);
+                Rect static_rect = {plot_x, plot_y - static_y_offset - static_z, static_texture->width, static_texture->height};
+                draw_rectangle(static_rect, static_texture, WHITE);
+            }
         }
     }
 }
