@@ -32,6 +32,7 @@ void begin_drawing(struct Window * window);
 void end_drawing(struct Window * window);
 void clear_background(Color color);
 void draw_rectangle(Rect rect, Texture *texture, Color color);
+void draw_tex_map(Rect rect, int east_offset, int south_east_offset, int south_offset, Texture *texture, Color color);
 void begin_3d(struct Window * window);
 void end_3d();
 

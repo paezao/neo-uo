@@ -64,6 +64,43 @@ void draw_rectangle(Rect rect, Texture *texture, Color color)
     }
 }
 
+void draw_tex_map(Rect rect, int east_offset, int south_east_offset, int south_offset, Texture *texture, Color color)
+{
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture( GL_TEXTURE_2D, texture->id );
+
+    glPushMatrix();
+
+    glScalef(1.0f, 1.0f, 1.0f);
+
+    glBegin(GL_QUADS);
+
+    glColor4ub(color.red, color.green, color.blue, color.alpha);
+
+    // Top Left
+    glTexCoord2f( 0.f, 0.f );
+    glVertex3f(rect.x, rect.y - (rect.width / 2), -10.0f);
+
+    // Bottom Left
+    glTexCoord2f( 0.f, 1.f );
+    glVertex3f(rect.x - (rect.width / 2), rect.y + south_offset, -10.0f);
+
+    // Bottom Right
+    glTexCoord2f( 1.f, 1.f );
+    glVertex3f(rect.x, rect.y + (rect.height / 2) + south_east_offset, -10.0f);
+
+    // Top Right
+    glTexCoord2f( 1.f, 0.f );
+    glVertex3f(rect.x + (rect.width / 2), rect.y + east_offset, -10.0f);
+
+    glEnd();
+
+    glPopMatrix();
+
+    glDisable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 void begin_3d(struct Window * window)
 {
     glMatrixMode(GL_PROJECTION);

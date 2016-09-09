@@ -5,6 +5,7 @@
 #include "core/input.h"
 #include "resources/map.h"
 #include "resources/art.h"
+#include "resources/tex_map.h"
 #include "world.h"
 
 struct game_state
@@ -21,8 +22,8 @@ static struct game_state *game_init()
     struct game_state *state = malloc(sizeof(*state));
     state->window = open_window(1280, 720, "Neo UO");
     state->map = load_map();
-    state->player_x = 1323;
-    state->player_y = 1624;
+    state->player_x = 1463;
+    state->player_y = 1648;
     return state;
 }
 

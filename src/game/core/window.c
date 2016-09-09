@@ -2,11 +2,26 @@
 #include <stdio.h>
 #include "window.h"
 
+static Window *current_window;
+
+static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
+
+static void window_size_callback(GLFWwindow* window, int width, int height)
+{
+    current_window->width = width;
+    current_window->height = height;
+}
+
 Window * open_window(int width, int height, char * title)
 {
     glfwInit();
 
     Window * window = (Window *)malloc(sizeof(Window));
+
+    current_window = window;
 
     window->handle = glfwCreateWindow(width, height, title, NULL, NULL);
     window->width = width;
@@ -17,6 +32,9 @@ Window * open_window(int width, int height, char * title)
     int viewport_width, viewport_height;
     glfwGetFramebufferSize(window->handle, &viewport_width, &viewport_height);
     glViewport(0, 0, viewport_width, viewport_height);
+
+    glfwSetFramebufferSizeCallback(window->handle, framebuffer_size_callback);
+    glfwSetWindowSizeCallback(window->handle, window_size_callback);
 
     return window;
 }
