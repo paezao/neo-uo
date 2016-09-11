@@ -47,12 +47,12 @@ void load_tile_data()
     fclose(fp);
 }
 
-LandTileData * get_land_tile_data(int index)
+struct land_tile_data * get_land_tile_data(int index)
 {
     return &land_tile_data[index];
 }
 
-StaticTileData * get_static_tile_data(int index)
+struct static_tile_data * get_static_tile_data(int index)
 {
     return &static_tile_data[index];
 }

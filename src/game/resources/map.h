@@ -7,25 +7,25 @@
 #define MAP_WIDTH_IN_TILES 7168
 #define MAP_HEIGHT_IN_TILES 4096
 
-typedef struct Tile
+struct tile
 {
     uint16 texture_id; 
     int8 z;
-    Vector statics;
-} Tile;
+    struct vector statics;
+};
 
-typedef struct Static
+struct item
 {
     uint16 texture_id; 
     int8 z;
-} Static;
+};
 
-typedef struct Map
+struct map
 {
-    Tile tiles[MAP_WIDTH_IN_TILES][MAP_HEIGHT_IN_TILES];    
-} Map;
+    struct tile tiles[MAP_WIDTH_IN_TILES][MAP_HEIGHT_IN_TILES];    
+};
 
-Map * load_map();
-void unload_map(Map *map);
+struct map * load_map();
+void unload_map(struct map *map);
 
 #endif

@@ -1,19 +1,19 @@
 #ifndef _CORE_VECTOR_H_
 #define _CORE_VECTOR_H_
 
-typedef struct Vector
+struct vector
 {
     void **items;
     int capacity;
     int total;
-} Vector;
+};
 
-void vector_init(Vector *v);
-int vector_total(Vector *v);
-void vector_add(Vector *v, void *item);
-void vector_set(Vector *v, int index, void *item);
-void *vector_get(Vector *v, int index);
-void vector_delete(Vector *v, int index);
-void vector_free(Vector *v);
+void vector_init(struct vector *v);
+int vector_total(struct vector *v);
+void vector_add(struct vector *v, void *item);
+void vector_set(struct vector *v, int index, void *item);
+void *vector_get(struct vector *v, int index);
+void vector_delete(struct vector *v, int index);
+void vector_free(struct vector *v);
 
 #endif

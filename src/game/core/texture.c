@@ -2,9 +2,9 @@
 #include <GLFW/glfw3.h>
 #include <stdlib.h>
 
-Texture * load_texture(void *data, uint32 width, uint32 height)
+struct texture * load_texture(void *data, uint32 width, uint32 height)
 {
-    Texture * texture = (Texture *)malloc(sizeof(Texture));
+    struct texture * texture = (struct texture *)malloc(sizeof(struct texture));
     texture->id = 0;
     texture->width = width;
     texture->height = height;
@@ -17,8 +17,6 @@ Texture * load_texture(void *data, uint32 width, uint32 height)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, 
             GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char *)data);
 
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
@@ -27,7 +25,7 @@ Texture * load_texture(void *data, uint32 width, uint32 height)
     return texture;
 }
 
-void unload_texture(Texture *texture)
+void unload_texture(struct texture *texture)
 {
     if(texture->id)
     {

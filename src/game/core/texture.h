@@ -3,14 +3,14 @@
 
 #include "types.h"
 
-typedef struct Texture
+struct texture
 {
     uint32 id;
     uint32 width;
     uint32 height;
-} Texture;
+};
 
-Texture * load_texture(void *data, uint32 width, uint32 height);
-void unload_texture(Texture *texture);
+struct texture * load_texture(void *data, uint32 width, uint32 height);
+void unload_texture(struct texture *texture);
 
 #endif

@@ -9,17 +9,17 @@ void update_input()
     glfwPollEvents();
 }
 
-bool is_key_down(struct Window * window, int key)
+bool is_key_down(struct window * window, int key)
 {
     return glfwGetKey(window->handle, key);
 }
 
-bool is_key_up(struct Window * window, int key)
+bool is_key_up(struct window * window, int key)
 {
     return !glfwGetKey(window->handle, key);
 }
 
-bool is_key_pressed(struct Window * window, int key)
+bool is_key_pressed(struct window * window, int key)
 {
     return ((current_key_state[key] != previous_key_state[key]) && (current_key_state[key] == 1));
 }

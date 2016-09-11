@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-static Texture * load_tex_map_texture(int index)
+static struct texture * load_tex_map_texture(int index)
 {
-    IndexEntry index_entry = get_index_entry("tmp/texidx.mul", index);
+    struct index_entry index_entry = get_index_entry("tmp/texidx.mul", index);
 
     FILE *art_fp = fopen("tmp/texmaps.mul", "r");
     fseek(art_fp, index_entry.lookup, SEEK_SET);
@@ -35,7 +35,7 @@ static Texture * load_tex_map_texture(int index)
         pixels[offset + 3] = (uint8)255;
     }
 
-    Texture *texture = load_texture(pixels, width, height);
+    struct texture *texture = load_texture(pixels, width, height);
 
     fclose(art_fp);
 
@@ -44,7 +44,7 @@ static Texture * load_tex_map_texture(int index)
     return texture;
 }
 
-Texture * get_tex_map_texture(int index)
+struct texture * get_tex_map_texture(int index)
 {
     if(!tex_map_textures[index])
         tex_map_textures[index] = load_tex_map_texture(index);

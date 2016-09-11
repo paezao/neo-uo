@@ -1,6 +1,6 @@
 #include "drawing.h"
 
-void begin_drawing(struct Window * window)
+void begin_drawing(struct window * window)
 {
     glLoadIdentity();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -9,19 +9,19 @@ void begin_drawing(struct Window * window)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void end_drawing(struct Window * window)
+void end_drawing(struct window * window)
 {
     glfwSwapBuffers(window->handle);
     glDisable(GL_BLEND);
 }
 
-void clear_background(Color color)
+void clear_background(struct color color)
 {
     glClearColor(color.red, color.green, color.blue, color.alpha);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void draw_rectangle(Rect rect, Texture *texture, Color color)
+void draw_rectangle(struct rectangle rect, struct texture *texture, struct color color)
 {
     if(texture) 
     {
@@ -64,7 +64,7 @@ void draw_rectangle(Rect rect, Texture *texture, Color color)
     }
 }
 
-void draw_tex_map(Rect rect, int east_offset, int south_east_offset, int south_offset, Texture *texture, Color color)
+void draw_tex_map(struct rectangle rect, int east_offset, int south_east_offset, int south_offset, struct texture *texture, struct color color)
 {
     glEnable(GL_TEXTURE_2D);
     glBindTexture( GL_TEXTURE_2D, texture->id );
@@ -101,7 +101,7 @@ void draw_tex_map(Rect rect, int east_offset, int south_east_offset, int south_o
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void begin_3d(struct Window * window)
+void begin_3d(struct window * window)
 {
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();

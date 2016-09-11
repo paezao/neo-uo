@@ -11,8 +11,8 @@
 
 struct game_state
 {
-    Window * window;
-    Map * map;
+    struct window * window;
+    struct map * map;
     int player_x;
     int player_y;
     bool hide_statics;

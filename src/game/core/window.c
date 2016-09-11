@@ -3,7 +3,7 @@
 #include "window.h"
 #include "input.h"
 
-static Window *current_window;
+static struct window *current_window;
 
 static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -16,11 +16,11 @@ static void window_size_callback(GLFWwindow* window, int width, int height)
     current_window->height = height;
 }
 
-Window * open_window(int width, int height, char * title)
+struct window * open_window(int width, int height, char * title)
 {
     glfwInit();
 
-    Window * window = (Window *)malloc(sizeof(Window));
+    struct window * window = (struct window *)malloc(sizeof(struct window));
 
     current_window = window;
 
@@ -41,14 +41,14 @@ Window * open_window(int width, int height, char * title)
     return window;
 }
 
-void close_window(Window * window)
+void close_window(struct window * window)
 {
     glfwDestroyWindow(window->handle);
     glfwTerminate();
     free(window);
 }
 
-bool window_should_close(Window * window)
+bool window_should_close(struct window * window)
 {
     return glfwWindowShouldClose(window->handle);
 }

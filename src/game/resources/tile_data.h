@@ -37,15 +37,15 @@
 #define FLAG_STAIR_BACK   0x40000000
 #define FLAG_STAIR_RIGHT  0x80000000
 
-typedef struct LandTileData
+struct land_tile_data
 {
     uint32 flags;
     uint16 texture_id; 
     char name[20];
 
-} LandTileData;
+};
 
-typedef struct StaticTileData
+struct static_tile_data
 {
     uint32 flags;
     uint8 weight;
@@ -61,15 +61,15 @@ typedef struct StaticTileData
     uint8 height;
     char name[20];
 
-} StaticTileData;
+};
 
-static LandTileData land_tile_data[0x4000];
-static StaticTileData static_tile_data[0x4000];
+static struct land_tile_data land_tile_data[0x4000];
+static struct static_tile_data static_tile_data[0x4000];
 
 void load_tile_data();
 
-LandTileData * get_land_tile_data(int index);
-StaticTileData * get_static_tile_data(int index);
+struct land_tile_data * get_land_tile_data(int index);
+struct static_tile_data * get_static_tile_data(int index);
 
 void unload_tile_data();
 

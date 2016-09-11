@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-static Texture * load_land_texture(int index)
+static struct texture * load_land_texture(int index)
 {
-    IndexEntry index_entry = get_index_entry("tmp/artidx.mul", index);
+    struct index_entry index_entry = get_index_entry("tmp/artidx.mul", index);
 
     FILE *art_fp = fopen("tmp/art.mul", "r");
     fseek(art_fp, index_entry.lookup, SEEK_SET);
@@ -58,7 +58,7 @@ static Texture * load_land_texture(int index)
         line_width -= 2;
     }
 
-    Texture *texture = load_texture(pixels, 44, 44);
+    struct texture *texture = load_texture(pixels, 44, 44);
 
     fclose(art_fp);
 
@@ -67,7 +67,7 @@ static Texture * load_land_texture(int index)
     return texture;
 }
 
-Texture * get_land_texture(int index)
+struct texture * get_land_texture(int index)
 {
     if(!land_textures[index])
         land_textures[index] = load_land_texture(index);
@@ -83,10 +83,10 @@ void unload_land_textures()
     }
 }
 
-static Texture * load_static_texture(int index)
+static struct texture * load_static_texture(int index)
 {
     index += 0x4000;
-    IndexEntry index_entry = get_index_entry("tmp/artidx.mul", index);
+    struct index_entry index_entry = get_index_entry("tmp/artidx.mul", index);
 
     FILE *art_fp = fopen("tmp/art.mul", "r");
     fseek(art_fp, index_entry.lookup, SEEK_SET);
@@ -141,7 +141,7 @@ static Texture * load_static_texture(int index)
         }
     }
 
-    Texture *texture = load_texture(pixels, width, height);
+    struct texture *texture = load_texture(pixels, width, height);
 
     fclose(art_fp);
 
@@ -151,7 +151,7 @@ static Texture * load_static_texture(int index)
     return texture;
 }
 
-Texture * get_static_texture(int index)
+struct texture * get_static_texture(int index)
 {
     if(!static_textures[index])
         static_textures[index] = load_static_texture(index);

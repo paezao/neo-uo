@@ -1,9 +1,9 @@
 #include "index.h"
 #include <stdio.h>
 
-IndexEntry get_index_entry(char *filepath, int index)
+struct index_entry get_index_entry(char *filepath, int index)
 {
-    IndexEntry index_entry;
+    struct index_entry index_entry;
 
     FILE *index_fp = fopen(filepath, "r");
     fseek(index_fp, index * 12, SEEK_SET);

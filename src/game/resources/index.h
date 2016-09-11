@@ -3,13 +3,13 @@
 
 #include "../core/types.h"
 
-typedef struct IndexEntry
+struct index_entry
 {
     int32 lookup;
     int32 length;
     int32 extra;
-} IndexEntry;
+};
 
-IndexEntry get_index_entry(char *filepath, int index);
+struct index_entry get_index_entry(char *filepath, int index);
 
 #endif

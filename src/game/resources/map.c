@@ -4,9 +4,9 @@
 #include <string.h>
 #include "index.h"
 
-Map * load_map()
+struct map * load_map()
 {
-    Map *map = (Map *)malloc(sizeof(Map));    
+    struct map *map = (struct map *)malloc(sizeof(struct map));    
 
     int width_in_blocks = 896;
     int height_in_blocks = 512;
@@ -24,7 +24,7 @@ Map * load_map()
         {
             tile_y_offset = block_y * 8;
 
-            // Read Tile
+            // Read tile
             int32 header;
             fread(&header, sizeof(int32), 1, fp); // Read Header
 
@@ -32,7 +32,7 @@ Map * load_map()
             {
                 for(int x = 0; x < 8; x++)
                 {
-                    Tile tile;
+                    struct tile tile;
                     vector_init(&tile.statics);
                     fread(&tile.texture_id, sizeof(uint16), 1, fp);
                     fread(&tile.z, sizeof(int8), 1, fp);
@@ -42,7 +42,7 @@ Map * load_map()
 
             // Read Statics
             int index = (block_x * height_in_blocks) + block_y;
-            IndexEntry index_entry = get_index_entry("tmp/staidx0.mul", index);
+            struct index_entry index_entry = get_index_entry("tmp/staidx0.mul", index);
             
             if(index_entry.lookup == 0xFFFFFFFF)
                 continue;
@@ -54,8 +54,8 @@ Map * load_map()
 
             for(int i = 0; i < index_entry.length / 7; i++)
             {
-                Static *static_ = malloc(sizeof(Static));
-                memset(static_, 0, sizeof(Static));
+                struct item *static_ = malloc(sizeof(struct item));
+                memset(static_, 0, sizeof(struct item));
                 fread(&static_->texture_id, sizeof(uint16), 1, st_fp);
                 fread(&x_offset, sizeof(uint8), 1, st_fp);
                 fread(&y_offset, sizeof(uint8), 1, st_fp);
@@ -73,7 +73,7 @@ Map * load_map()
             {
                 for(int x = 0; x < 8; x++)
                 {
-                    Tile *tile = &map->tiles[tile_x_offset + x][tile_y_offset + y];
+                    struct tile *tile = &map->tiles[tile_x_offset + x][tile_y_offset + y];
 
                     int n = vector_total(&tile->statics);
 
@@ -81,8 +81,8 @@ Map * load_map()
                     {
                         for (int d = 0 ; d < n - c - 1; d++)
                         {
-                            Static *_static_1 = vector_get(&tile->statics, d);
-                            Static *_static_2 = vector_get(&tile->statics, d + 1);
+                            struct item *_static_1 = vector_get(&tile->statics, d);
+                            struct item *_static_2 = vector_get(&tile->statics, d + 1);
                             if (_static_1->z > _static_2->z)
                             {
                                 vector_set(&tile->statics, d, _static_2);
@@ -100,6 +100,6 @@ Map * load_map()
     return map;
 }
 
-void unload_map(Map *map)
+void unload_map(struct map *map)
 {
 }

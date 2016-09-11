@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void draw_world(Window *window, Map *map, int x, int y, int radius, bool hide_statics, bool hide_roofs, bool hide_walls)
+void draw_world(struct window *window, struct map *map, int x, int y, int radius, bool hide_statics, bool hide_roofs, bool hide_walls)
 {
     int init_x = x - radius;
     int init_y = y - radius;
@@ -32,7 +32,7 @@ void draw_world(Window *window, Map *map, int x, int y, int radius, bool hide_st
             int plot_y = anchor_y + ((tiles_x + tiles_y) * tile_height / 2);
 
 
-            Color color = WHITE;
+            struct color color = WHITE;
             if(x == center_x && y == center_y) color = RED;
 
             int current_land_z = map->tiles[x][y].z;
@@ -62,10 +62,10 @@ void draw_world(Window *window, Map *map, int x, int y, int radius, bool hide_st
                 if(current_land_z != south_east_land_z) south_east_offset = (current_land_z - south_east_land_z) * 4;
                 if(current_land_z != south_land_z) south_offset = (current_land_z - south_land_z) * 4;
 
-                Texture *tex_map_texture = get_tex_map_texture(map->tiles[x][y].texture_id);
+                struct texture *tex_map_texture = get_tex_map_texture(map->tiles[x][y].texture_id);
                 if (!tex_map_texture) continue;
 
-                Rect tex_map_rect = {plot_x, plot_y - land_z, tile_width, tile_height};
+                struct rectangle tex_map_rect = {plot_x, plot_y - land_z, tile_width, tile_height};
                 if(!land_no_draw) draw_tex_map(tex_map_rect, east_offset, south_east_offset, south_offset, tex_map_texture, color);
             }
             else
@@ -73,14 +73,14 @@ void draw_world(Window *window, Map *map, int x, int y, int radius, bool hide_st
                 if(map->tiles[x][y].texture_id < 3 || 
                         (map->tiles[x][y].texture_id >= 0x1AF && map->tiles[x][y].texture_id <= 0x1B5)) continue;
 
-                Texture *land_texture = get_land_texture(map->tiles[x][y].texture_id);
+                struct texture *land_texture = get_land_texture(map->tiles[x][y].texture_id);
                 if (!land_texture) continue;
 
-                Rect land_rect = {plot_x, plot_y - land_z, tile_width, tile_height};
+                struct rectangle land_rect = {plot_x, plot_y - land_z, tile_width, tile_height};
                 if(!land_no_draw) draw_rectangle(land_rect, land_texture, color);
             }
 
-            Tile *tile = &map->tiles[x][y];
+            struct tile *tile = &map->tiles[x][y];
 
             if(!hide_statics)
             { 
@@ -91,8 +91,8 @@ void draw_world(Window *window, Map *map, int x, int y, int radius, bool hide_st
 
                 for(int i=0; i < vector_total(&tile->statics); i++)
                 {
-                    Static *_static = vector_get(&tile->statics, i);
-                    StaticTileData *static_tile_data = get_static_tile_data(_static->texture_id);
+                    struct item *_static = vector_get(&tile->statics, i);
+                    struct static_tile_data *static_tile_data = get_static_tile_data(_static->texture_id);
 
                     if(hide_roofs && (static_tile_data->flags & FLAG_ROOF)) continue;
                     if(hide_walls && (static_tile_data->flags & FLAG_WALL)) continue;
@@ -100,7 +100,7 @@ void draw_world(Window *window, Map *map, int x, int y, int radius, bool hide_st
                     //if(_static->texture_id < 3) continue;
                     if(_static->texture_id < 3 || (_static->texture_id >= 0x1AF && _static->texture_id <= 0x1B5)) continue;
 
-                    Texture *static_texture = get_static_texture(_static->texture_id);
+                    struct texture *static_texture = get_static_texture(_static->texture_id);
                     if (!static_texture) continue;
 
                     int static_z = (_static->z - center_z) * 4;
@@ -108,7 +108,7 @@ void draw_world(Window *window, Map *map, int x, int y, int radius, bool hide_st
                     if(static_z <= draw_max_altitude)
                     {
                         int static_y_offset = (static_texture->height / 2) - (tile_height / 2);
-                        Rect static_rect = {plot_x, plot_y - static_y_offset - static_z, static_texture->width, static_texture->height};
+                        struct rectangle static_rect = {plot_x, plot_y - static_y_offset - static_z, static_texture->width, static_texture->height};
                         draw_rectangle(static_rect, static_texture, WHITE);
                     }
                 }
