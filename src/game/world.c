@@ -1,10 +1,11 @@
 #include "world.h"
 #include "resources/art.h"
 #include "resources/tex_map.h"
+#include "resources/tile_data.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-void draw_world(Window *window, Map *map, int x, int y, int radius)
+void draw_world(Window *window, Map *map, int x, int y, int radius, bool hide_statics, bool hide_roofs, bool hide_walls)
 {
     int init_x = x - radius;
     int init_y = y - radius;
@@ -49,6 +50,9 @@ void draw_world(Window *window, Map *map, int x, int y, int radius)
             }
             */
 
+            int land_tile_id = map->tiles[x][y].texture_id;
+            int land_no_draw = (land_tile_id < 3 || (land_tile_id >= 0x1AF && land_tile_id <= 0x1B5));
+            
             if((current_land_z != east_land_z ||
                     current_land_z != south_east_land_z ||
                     current_land_z != south_land_z))
@@ -62,7 +66,7 @@ void draw_world(Window *window, Map *map, int x, int y, int radius)
                 if (!tex_map_texture) continue;
 
                 Rect tex_map_rect = {plot_x, plot_y - land_z, tile_width, tile_height};
-                draw_tex_map(tex_map_rect, east_offset, south_east_offset, south_offset, tex_map_texture, color);
+                if(!land_no_draw) draw_tex_map(tex_map_rect, east_offset, south_east_offset, south_offset, tex_map_texture, color);
             }
             else
             {
@@ -73,26 +77,41 @@ void draw_world(Window *window, Map *map, int x, int y, int radius)
                 if (!land_texture) continue;
 
                 Rect land_rect = {plot_x, plot_y - land_z, tile_width, tile_height};
-                draw_rectangle(land_rect, land_texture, color);
+                if(!land_no_draw) draw_rectangle(land_rect, land_texture, color);
             }
 
             Tile *tile = &map->tiles[x][y];
 
-            for(int i=0; i < vector_total(&tile->statics); i++)
-            {
-                Static *_static = vector_get(&tile->statics, i);
+            if(!hide_statics)
+            { 
+                int draw_max_altitude = 255;
 
-                if(_static->texture_id < 3) continue;
-                //if(_static->texture_id < 3 || (_static->texture_id >= 0x1AF && _static->texture_id <= 0x1B5)) continue;
+                if(hide_roofs)
+                    draw_max_altitude = current_land_z - (current_land_z % 20) + 20;
 
-                Texture *static_texture = get_static_texture(_static->texture_id);
-                if (!static_texture) continue;
+                for(int i=0; i < vector_total(&tile->statics); i++)
+                {
+                    Static *_static = vector_get(&tile->statics, i);
+                    StaticTileData *static_tile_data = get_static_tile_data(_static->texture_id);
 
-                int static_z = (_static->z - center_z) * 4;
+                    if(hide_roofs && (static_tile_data->flags & FLAG_ROOF)) continue;
+                    if(hide_walls && (static_tile_data->flags & FLAG_WALL)) continue;
 
-                int static_y_offset = (static_texture->height / 2) - (tile_height / 2);
-                Rect static_rect = {plot_x, plot_y - static_y_offset - static_z, static_texture->width, static_texture->height};
-                draw_rectangle(static_rect, static_texture, WHITE);
+                    //if(_static->texture_id < 3) continue;
+                    if(_static->texture_id < 3 || (_static->texture_id >= 0x1AF && _static->texture_id <= 0x1B5)) continue;
+
+                    Texture *static_texture = get_static_texture(_static->texture_id);
+                    if (!static_texture) continue;
+
+                    int static_z = (_static->z - center_z) * 4;
+
+                    if(static_z <= draw_max_altitude)
+                    {
+                        int static_y_offset = (static_texture->height / 2) - (tile_height / 2);
+                        Rect static_rect = {plot_x, plot_y - static_y_offset - static_z, static_texture->width, static_texture->height};
+                        draw_rectangle(static_rect, static_texture, WHITE);
+                    }
+                }
             }
         }
     }

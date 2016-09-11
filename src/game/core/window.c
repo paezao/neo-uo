@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "window.h"
+#include "input.h"
 
 static Window *current_window;
 
@@ -35,6 +36,7 @@ Window * open_window(int width, int height, char * title)
 
     glfwSetFramebufferSizeCallback(window->handle, framebuffer_size_callback);
     glfwSetWindowSizeCallback(window->handle, window_size_callback);
+    glfwSetKeyCallback(window->handle, key_callback);
 
     return window;
 }

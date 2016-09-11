@@ -71,7 +71,14 @@
 #define KEY_Y                89
 #define KEY_Z                90
 
+static char previous_key_state[512] = { 0 };
+static char current_key_state[512] = { 0 };
+static bool last_key_pressed;
+
+void update_input();
 bool is_key_down(struct Window * window, int key);
 bool is_key_up(struct Window * window, int key);
+bool is_key_pressed(struct Window * window, int key);
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
 
 #endif

@@ -67,6 +67,31 @@ Map * load_map()
 
                 vector_add(&map->tiles[statics_x_offset][statics_y_offset].statics, static_);
             }
+
+            // Sort Statics
+            for(int y = 0; y < 8; y++)
+            {
+                for(int x = 0; x < 8; x++)
+                {
+                    Tile *tile = &map->tiles[tile_x_offset + x][tile_y_offset + y];
+
+                    int n = vector_total(&tile->statics);
+
+                    for (int c = 0 ; c < ( n - 1 ); c++)
+                    {
+                        for (int d = 0 ; d < n - c - 1; d++)
+                        {
+                            Static *_static_1 = vector_get(&tile->statics, d);
+                            Static *_static_2 = vector_get(&tile->statics, d + 1);
+                            if (_static_1->z > _static_2->z)
+                            {
+                                vector_set(&tile->statics, d, _static_2);
+                                vector_set(&tile->statics, d + 1, _static_1);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     fclose(fp);
