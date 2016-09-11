@@ -3,6 +3,7 @@
 #include "game.h"
 #include "core/window.h"
 #include "core/input.h"
+#include "core/log.h"
 #include "resources/map.h"
 #include "resources/art.h"
 #include "resources/tex_map.h"
@@ -22,13 +23,9 @@ struct game_state
 
 static struct game_state *game_init()
 {
-    printf("Initializing Game...");
+    print_log(LOG_INFO, "Initializing Game");
     struct game_state *state = malloc(sizeof(*state));
     state->window = open_window(1280, 720, "Neo UO");
-    printf("Done\n");
-    printf("Loading Map...");
-    state->map = load_map();
-    printf("Done\n");
     state->player_x = 1463;
     state->player_y = 1648;
     return state;
@@ -36,24 +33,25 @@ static struct game_state *game_init()
 
 static void game_finalize(struct game_state *state)
 {
-    printf("Finalizing Game\n");
+    print_log(LOG_INFO, "Finalizing Game");
     close_window(state->window);
     free(state->map);
     free(state);
     unload_land_textures();
 }
 
-static void game_reload(struct game_state *state)
+static void game_load(struct game_state *state)
 {
-    printf("Reloading Game\n");
-    printf("Loading Tile Data...");
+    print_log(LOG_INFO, "Loading Game");
+    print_log(LOG_INFO, "Loading Map");
+    state->map = load_map();
+    print_log(LOG_INFO, "Loading Tile Data");
     load_tile_data();
-    printf("Done\n");
 }
 
 static void game_unload(struct game_state *state)
 {
-    printf("Unloading Game\n");
+    print_log(LOG_INFO, "Unloading Game");
 }
 
 static bool game_step(struct game_state *state)
@@ -93,7 +91,7 @@ static bool game_step(struct game_state *state)
 const struct game_api GAME_API = 
 {
     .init = game_init,
-    .reload = game_reload,
+    .load = game_load,
     .step = game_step,
     .unload = game_unload,
     .finalize = game_finalize

@@ -37,7 +37,7 @@ static void game_load(struct game *game)
                 game->api = *api;
                 if(game->state == NULL)
                     game->state = game->api.init();
-                game->api.reload(game->state);
+                game->api.load(game->state);
             }
             else
             {

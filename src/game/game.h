@@ -13,10 +13,10 @@ struct game_api
     // Destroys a game state
     void (*finalize)(struct game_state *state);
 
-    // Called exactly once when the game code is reloaded
-    void (*reload)(struct game_state *state);
+    // Called exactly once when the game code is loaded (or reloaded)
+    void (*load)(struct game_state *state);
 
-    // Called exactly once when the game code is about to be reloaded
+    // Called exactly once when the game code is about to be unloaded
     void (*unload)(struct game_state *state);
 
     // Called at a regular interval by the main program
