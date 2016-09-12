@@ -77,7 +77,7 @@ void draw_world(struct window *window, struct map *map, int x, int y, int radius
                 if (!land_texture) continue;
 
                 struct rectangle land_rect = {plot_x, plot_y - land_z, tile_width, tile_height};
-                if(!land_no_draw) draw_rectangle(land_rect, land_texture, color);
+                if(!land_no_draw) draw_texture(land_rect, land_texture, color);
             }
 
             struct tile *tile = &map->tiles[x][y];
@@ -109,10 +109,22 @@ void draw_world(struct window *window, struct map *map, int x, int y, int radius
                     {
                         int static_y_offset = (static_texture->height / 2) - (tile_height / 2);
                         struct rectangle static_rect = {plot_x, plot_y - static_y_offset - static_z, static_texture->width, static_texture->height};
-                        draw_rectangle(static_rect, static_texture, WHITE);
+                        draw_texture(static_rect, static_texture, WHITE);
                     }
                 }
             }
         }
     }
+}
+
+void draw_tex_map(struct rectangle rect, int east_offset, int south_east_offset, int south_offset, struct texture *texture, struct color color)
+{
+    struct vertex vertices[4] = {
+        {rect.x, rect.y - (rect.width / 2), -1.0f},
+        {rect.x - (rect.width / 2), rect.y + south_offset, -1.0f},
+        {rect.x, rect.y + (rect.height / 2) + south_east_offset, -1.0f},
+        {rect.x + (rect.width / 2), rect.y + east_offset, -1.0f}
+    };
+
+    draw_texture_adv(vertices, texture, color);
 }

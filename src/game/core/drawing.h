@@ -21,6 +21,13 @@ struct rectangle
     float height;
 };
 
+struct vertex
+{
+    float x;
+    float y;
+    float z;
+};
+
 #define WHITE (struct color){ 255, 255, 255, 255 }
 #define GRAY  (struct color){ 130, 130, 130, 255 }
 #define BLACK (struct color){ 0, 0, 0, 255 }
@@ -31,8 +38,8 @@ struct rectangle
 void begin_drawing(struct window * window);
 void end_drawing(struct window * window);
 void clear_background(struct color color);
-void draw_rectangle(struct rectangle rect, struct texture *texture, struct color color);
-void draw_tex_map(struct rectangle rect, int east_offset, int south_east_offset, int south_offset, struct texture *texture, struct color color);
+void draw_texture_adv(struct vertex vertices[4], struct texture *texture, struct color color);
+void draw_texture(struct rectangle rect, struct texture *texture, struct color color);
 void begin_3d(struct window * window);
 void end_3d();
 

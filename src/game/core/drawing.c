@@ -21,50 +21,7 @@ void clear_background(struct color color)
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void draw_rectangle(struct rectangle rect, struct texture *texture, struct color color)
-{
-    if(texture) 
-    {
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture( GL_TEXTURE_2D, texture->id );
-    }
-
-    glPushMatrix();
-
-    glScalef(1.0f, 1.0f, 1.0f);
-
-    glBegin(GL_QUADS);
-
-    glColor4ub(color.red, color.green, color.blue, color.alpha);
-
-    // Top Left
-    if(texture) glTexCoord2f( 0.f, 0.f );
-    glVertex3f(rect.x - rect.width / 2, rect.y - rect.height / 2, -10.0f);
-
-    // Bottom Left
-    if(texture) glTexCoord2f( 0.f, 1.f );
-    glVertex3f(rect.x - rect.width / 2, rect.y + rect.height / 2, -10.0f);
-
-    // Bottom Right
-    if(texture) glTexCoord2f( 1.f, 1.f );
-    glVertex3f(rect.x + rect.width / 2, rect.y + rect.height / 2, -10.0f);
-
-    // Top Right
-    if(texture) glTexCoord2f( 1.f, 0.f );
-    glVertex3f(rect.x + rect.width / 2, rect.y - rect.height / 2, -10.0f);
-
-    glEnd();
-
-    glPopMatrix();
-
-    if(texture)
-    {
-        glDisable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
-}
-
-void draw_tex_map(struct rectangle rect, int east_offset, int south_east_offset, int south_offset, struct texture *texture, struct color color)
+void draw_texture_adv(struct vertex vertices[4], struct texture *texture, struct color color)
 {
     glEnable(GL_TEXTURE_2D);
     glBindTexture( GL_TEXTURE_2D, texture->id );
@@ -79,19 +36,19 @@ void draw_tex_map(struct rectangle rect, int east_offset, int south_east_offset,
 
     // Top Left
     glTexCoord2f( 0.f, 0.f );
-    glVertex3f(rect.x, rect.y - (rect.width / 2), -10.0f);
+    glVertex3f(vertices[0].x, vertices[0].y, vertices[0].z);
 
     // Bottom Left
     glTexCoord2f( 0.f, 1.f );
-    glVertex3f(rect.x - (rect.width / 2), rect.y + south_offset, -10.0f);
+    glVertex3f(vertices[1].x, vertices[1].y, vertices[1].z);
 
     // Bottom Right
     glTexCoord2f( 1.f, 1.f );
-    glVertex3f(rect.x, rect.y + (rect.height / 2) + south_east_offset, -10.0f);
+    glVertex3f(vertices[2].x, vertices[2].y, vertices[2].z);
 
     // Top Right
     glTexCoord2f( 1.f, 0.f );
-    glVertex3f(rect.x + (rect.width / 2), rect.y + east_offset, -10.0f);
+    glVertex3f(vertices[3].x, vertices[3].y, vertices[3].z);
 
     glEnd();
 
@@ -99,6 +56,18 @@ void draw_tex_map(struct rectangle rect, int east_offset, int south_east_offset,
 
     glDisable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void draw_texture(struct rectangle rect, struct texture *texture, struct color color)
+{
+    struct vertex vertices[4] = {
+        {rect.x - rect.width / 2, rect.y - rect.height / 2, -1.0f},
+        {rect.x - rect.width / 2, rect.y + rect.height / 2, -1.0f},
+        {rect.x + rect.width / 2, rect.y + rect.height / 2, -1.0f},
+        {rect.x + rect.width / 2, rect.y - rect.height / 2, -1.0f}
+    };
+
+    draw_texture_adv(vertices, texture, color);
 }
 
 void begin_3d(struct window * window)
