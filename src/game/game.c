@@ -22,13 +22,14 @@ struct game_state
     bool hide_statics;
     bool hide_roofs;
     bool hide_walls;
+    bool show_z;
 };
 
 static struct game_state *game_init()
 {
     print_log(LOG_INFO, "Initializing Game");
     struct game_state *state = malloc(sizeof(*state));
-    state->window = open_window(1280, 720, "Neo UO");
+    state->window = open_window(800, 450, "Neo UO");
     print_log(LOG_INFO, "Loading Map");
     state->map = load_map();
     state->player_x = 1463;
@@ -43,6 +44,9 @@ static void game_finalize(struct game_state *state)
     free(state->map);
     free(state);
     unload_land_textures();
+    unload_static_textures();
+    unload_tex_map_textures();
+    unload_map(state->map);
 }
 
 static void game_load(struct game_state *state)
@@ -70,16 +74,18 @@ static bool game_step(struct game_state *state)
 
     begin_3d(state->window);
 
-    draw_world(state->window, state->map, state->player_x, state->player_y, 22, state->hide_statics, state->hide_roofs, state->hide_walls);
+    draw_world(state->window, state->map, state->player_x, state->player_y, 22, state->hide_statics, state->hide_roofs, state->hide_walls, state->show_z);
 
     draw_text(10, 10, 0, format_text("FPS %2.0f", get_fps()), RED);
 
-    draw_text(10, state->window->height - 50, 0, "Statics", WHITE);
-    draw_text(100, state->window->height - 50, 0, state->hide_statics ? "OFF" : "ON", state->hide_statics ? RED : GREEN);
-    draw_text(10, state->window->height - 35, 0, "Roofs", WHITE);
-    draw_text(100, state->window->height - 35, 0, state->hide_roofs ? "OFF" : "ON", state->hide_roofs ? RED : GREEN);
-    draw_text(10, state->window->height - 20, 0, "Walls", WHITE);
-    draw_text(100, state->window->height - 20, 0, state->hide_walls ? "OFF" : "ON", state->hide_walls ? RED : GREEN);
+    draw_text(10, state->window->height - 60, 0, "F1 Statics", WHITE);
+    draw_text(120, state->window->height - 60, 0, state->hide_statics ? "OFF" : "ON", state->hide_statics ? RED : GREEN);
+    draw_text(10, state->window->height - 45, 0, "F2 Roofs", WHITE);
+    draw_text(120, state->window->height - 45, 0, state->hide_roofs ? "OFF" : "ON", state->hide_roofs ? RED : GREEN);
+    draw_text(10, state->window->height - 30, 0, "F3 Walls", WHITE);
+    draw_text(120, state->window->height - 30, 0, state->hide_walls ? "OFF" : "ON", state->hide_walls ? RED : GREEN);
+    draw_text(10, state->window->height - 15, 0, "F4 Show Z", WHITE);
+    draw_text(120, state->window->height - 15, 0, state->show_z ? "ON" : "OFF", state->show_z ? GREEN : RED);
 
     end_3d();
 
@@ -98,6 +104,7 @@ static bool game_step(struct game_state *state)
     if(is_key_pressed(state->window, KEY_F1)) { state->hide_statics = !state->hide_statics; }
     if(is_key_pressed(state->window, KEY_F2)) { state->hide_roofs = !state->hide_roofs; }
     if(is_key_pressed(state->window, KEY_F3)) { state->hide_walls = !state->hide_walls; }
+    if(is_key_pressed(state->window, KEY_F4)) { state->show_z = !state->show_z; }
 
     update_input();
 

@@ -1,7 +1,7 @@
 #include "log.h"
 #include <stdio.h>
 
-void print_log(enum log_type log_type, char *text)
+void print_log(enum log_type log_type, const char *text)
 {
     char *prefix;
 

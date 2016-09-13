@@ -2,10 +2,11 @@
 #include "resources/art.h"
 #include "resources/tex_map.h"
 #include "resources/tile_data.h"
+#include "core/text.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-void draw_world(struct window *window, struct map *map, int x, int y, int radius, bool hide_statics, bool hide_roofs, bool hide_walls)
+void draw_world(struct window *window, struct map *map, int x, int y, int radius, bool hide_statics, bool hide_roofs, bool hide_walls, bool show_z)
 {
     int init_x = x - radius;
     int init_y = y - radius;
@@ -79,6 +80,8 @@ void draw_world(struct window *window, struct map *map, int x, int y, int radius
                 struct rectangle land_rect = {plot_x, plot_y - land_z, tile_width, tile_height};
                 if(!land_no_draw) draw_texture(land_rect, land_texture, color);
             }
+
+            if(show_z) draw_text(plot_x - 5, plot_y - land_z, 0, format_text("%d", current_land_z), WHITE);
 
             struct tile *tile = &map->tiles[x][y];
 

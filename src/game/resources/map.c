@@ -102,4 +102,14 @@ struct map * load_map()
 
 void unload_map(struct map *map)
 {
+    /*
+    for(int x=0; x < MAP_WIDTH_IN_TILES; x++)
+    {
+        for(int y=0; y < MAP_HEIGHT_IN_TILES; y++)
+        {
+            vector_free(&map->tiles[x][y].statics);
+        }
+    }
+    free(map);
+    */
 }
