@@ -5,6 +5,7 @@
 #include "core/input.h"
 #include "core/log.h"
 #include "core/text.h"
+#include "core/time.h"
 #include "resources/map.h"
 #include "resources/art.h"
 #include "resources/tex_map.h"
@@ -51,6 +52,7 @@ static void game_load(struct game_state *state)
     load_tile_data();
     print_log(LOG_INFO, "Loading Ascii Fonts");
     load_ascii_fonts();
+    init_time(60);
 }
 
 static void game_unload(struct game_state *state)
@@ -60,6 +62,7 @@ static void game_unload(struct game_state *state)
 
 static bool game_step(struct game_state *state)
 {
+    begin_frame_time();
 
     begin_drawing(state->window);
 
@@ -68,7 +71,15 @@ static bool game_step(struct game_state *state)
     begin_3d(state->window);
 
     draw_world(state->window, state->map, state->player_x, state->player_y, 22, state->hide_statics, state->hide_roofs, state->hide_walls);
-    draw_text(10, 10, 0, "NEO UO", RED);
+
+    draw_text(10, 10, 0, format_text("FPS %2.0f", get_fps()), RED);
+
+    draw_text(10, state->window->height - 50, 0, "Statics", WHITE);
+    draw_text(100, state->window->height - 50, 0, state->hide_statics ? "OFF" : "ON", state->hide_statics ? RED : GREEN);
+    draw_text(10, state->window->height - 35, 0, "Roofs", WHITE);
+    draw_text(100, state->window->height - 35, 0, state->hide_roofs ? "OFF" : "ON", state->hide_roofs ? RED : GREEN);
+    draw_text(10, state->window->height - 20, 0, "Walls", WHITE);
+    draw_text(100, state->window->height - 20, 0, state->hide_walls ? "OFF" : "ON", state->hide_walls ? RED : GREEN);
 
     end_3d();
 
@@ -89,6 +100,8 @@ static bool game_step(struct game_state *state)
     if(is_key_pressed(state->window, KEY_F3)) { state->hide_walls = !state->hide_walls; }
 
     update_input();
+
+    end_frame_time();
 
     return true;
 }

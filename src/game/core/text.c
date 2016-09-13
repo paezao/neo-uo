@@ -2,8 +2,10 @@
 #include "texture.h"
 #include "types.h"
 #include <string.h>
+#include <stdio.h>
+#include <stdarg.h>
 
-void draw_text(int x, int y, int font, char *text, struct color color)
+void draw_text(int x, int y, int font, const char *text, struct color color)
 {
     int len = strlen(text);
 
@@ -20,4 +22,16 @@ void draw_text(int x, int y, int font, char *text, struct color color)
 
         draw_texture(rect, tex, color);
     }
+}
+
+const char * format_text(const char *text, ...)
+{
+    static char buffer[64];
+
+    va_list args;
+    va_start(args, text);
+    vsprintf(buffer, text, args);
+    va_end(args);
+
+    return buffer;
 }
