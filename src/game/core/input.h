@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <stdbool.h>
 #include "window.h"
+#include "math.h"
 
 // Keyboard Function Keys
 #define KEY_SPACE            32
@@ -79,6 +80,7 @@ void update_input();
 bool is_key_down(struct window * window, int key);
 bool is_key_up(struct window * window, int key);
 bool is_key_pressed(struct window * window, int key);
+struct vector2 get_mouse_position(struct window * window);
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
 
 #endif

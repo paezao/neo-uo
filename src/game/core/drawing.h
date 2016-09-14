@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include "window.h"
 #include "texture.h"
+#include "math.h"
 
 struct color 
 {
@@ -11,21 +12,6 @@ struct color
     unsigned char green;
     unsigned char blue;
     unsigned char alpha;
-};
-
-struct rectangle
-{
-    float x;
-    float y;
-    float width;
-    float height;
-};
-
-struct vertex
-{
-    float x;
-    float y;
-    float z;
 };
 
 #define WHITE (struct color){ 255, 255, 255, 255 }
@@ -38,7 +24,7 @@ struct vertex
 void begin_drawing(struct window * window);
 void end_drawing(struct window * window);
 void clear_background(struct color color);
-void draw_texture_adv(struct vertex vertices[4], struct texture *texture, struct color color);
+void draw_texture_adv(struct vector3 vertices[4], struct texture *texture, struct color color);
 void draw_texture(struct rectangle rect, struct texture *texture, struct color color);
 void begin_3d(struct window * window);
 void end_3d();

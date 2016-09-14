@@ -21,7 +21,7 @@ void clear_background(struct color color)
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void draw_texture_adv(struct vertex vertices[4], struct texture *texture, struct color color)
+void draw_texture_adv(struct vector3 vertices[4], struct texture *texture, struct color color)
 {
     glEnable(GL_TEXTURE_2D);
     glBindTexture( GL_TEXTURE_2D, texture->id );
@@ -60,7 +60,7 @@ void draw_texture_adv(struct vertex vertices[4], struct texture *texture, struct
 
 void draw_texture(struct rectangle rect, struct texture *texture, struct color color)
 {
-    struct vertex vertices[4] = {
+    struct vector3 vertices[4] = {
         {rect.x - rect.width / 2, rect.y - rect.height / 2, -1.0f},
         {rect.x - rect.width / 2, rect.y + rect.height / 2, -1.0f},
         {rect.x + rect.width / 2, rect.y + rect.height / 2, -1.0f},

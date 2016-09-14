@@ -4,7 +4,8 @@
 enum log_type
 {
     LOG_INFO,
-    LOG_ERROR
+    LOG_ERROR,
+    LOG_DEBUG
 };
 
 void print_log(enum log_type log_type, const char *text);

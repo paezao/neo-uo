@@ -3,10 +3,11 @@
 #include "resources/tex_map.h"
 #include "resources/tile_data.h"
 #include "core/text.h"
+#include "core/math.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-void draw_world(struct window *window, struct map *map, int x, int y, int radius, bool hide_statics, bool hide_roofs, bool hide_walls, bool show_z)
+void draw_world(struct window *window, struct map *map, int x, int y, int radius, bool hide_statics, bool hide_roofs, bool hide_walls, bool show_z, struct vector2 mouse_pos)
 {
     int init_x = x - radius;
     int init_y = y - radius;
@@ -32,9 +33,7 @@ void draw_world(struct window *window, struct map *map, int x, int y, int radius
             int plot_x = anchor_x + ((tiles_x - tiles_y) * tile_width / 2);
             int plot_y = anchor_y + ((tiles_x + tiles_y) * tile_height / 2);
 
-
             struct color color = WHITE;
-            if(x == center_x && y == center_y) color = RED;
 
             int current_land_z = map->tiles[x][y].z;
             int east_land_z = map->tiles[x + 1][y].z;
@@ -43,13 +42,19 @@ void draw_world(struct window *window, struct map *map, int x, int y, int radius
 
             int land_z = (current_land_z - center_z) * 4;
 
-            /*
             if(plot_x < (- 2 * tile_width) || plot_x > window->width + (2 * tile_width) ||
                     (plot_y - land_z) < (- 2 * tile_height) || (plot_y - land_z) > window->height + (2 * tile_height))
             {
                 continue;
             }
-            */
+
+            // Mouse Picking tests
+            if(mouse_pos.x >= (plot_x - (tile_width / 2)) && mouse_pos.x <= (plot_x + (tile_width / 2)) &&
+                    mouse_pos.y >= ((plot_y - land_z) - (tile_height / 2)) && mouse_pos.y <= ((plot_y - land_z) + (tile_height / 2)))
+                color = GREEN;
+            
+            // Current Tile Coloring
+            if(x == center_x && y == center_y) color = RED;
 
             int land_tile_id = map->tiles[x][y].texture_id;
             int land_no_draw = (land_tile_id < 3 || (land_tile_id >= 0x1AF && land_tile_id <= 0x1B5));
@@ -81,7 +86,14 @@ void draw_world(struct window *window, struct map *map, int x, int y, int radius
                 if(!land_no_draw) draw_texture(land_rect, land_texture, color);
             }
 
-            if(show_z) draw_text(plot_x - 5, plot_y - land_z, 0, format_text("%d", current_land_z), WHITE);
+            if(show_z) 
+            {
+                if((x > (center_x  - 4) && x < (center_x + 4) && y > (center_y - 4) && y < (center_y + 4)))
+                {
+                    struct size text_size = get_text_size(0, format_text("%d", current_land_z));
+                    draw_text(plot_x - (text_size.width / 2), plot_y - land_z - (text_size.height / 2), 0, format_text("%d", current_land_z), WHITE);
+                }
+            }
 
             struct tile *tile = &map->tiles[x][y];
 
@@ -122,7 +134,7 @@ void draw_world(struct window *window, struct map *map, int x, int y, int radius
 
 void draw_tex_map(struct rectangle rect, int east_offset, int south_east_offset, int south_offset, struct texture *texture, struct color color)
 {
-    struct vertex vertices[4] = {
+    struct vector3 vertices[4] = {
         {rect.x, rect.y - (rect.width / 2), -1.0f},
         {rect.x - (rect.width / 2), rect.y + south_offset, -1.0f},
         {rect.x, rect.y + (rect.height / 2) + south_east_offset, -1.0f},
