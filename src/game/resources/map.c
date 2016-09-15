@@ -24,6 +24,8 @@ struct map * load_map()
         {
             tile_y_offset = block_y * 8;
 
+            int block_length = sizeof(int32) + (8 * 8 * (sizeof(uint16) + sizeof(uint8)));
+
             // Read tile
             int32 header;
             fread(&header, sizeof(int32), 1, fp); // Read Header

@@ -22,10 +22,23 @@ struct vector2
     float y;
 };
 
+struct point2
+{
+    float x;
+    float y;
+};
+
 struct size
 {
     float width;
     float height;
+};
+
+struct triangle
+{
+    struct point2 p1;
+    struct point2 p2;
+    struct point2 p3;
 };
 
 #endif

@@ -7,6 +7,33 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/*
+function ptInTriangle(p, p0, p1, p2) {
+    var dX = p.x-p2.x;
+    var dY = p.y-p2.y;
+    var dX21 = p2.x-p1.x;
+    var dY12 = p1.y-p2.y;
+    var D = dY12*(p0.x-p2.x) + dX21*(p0.y-p2.y);
+    var s = dY12*dX + dX21*dY;
+    var t = (p2.y-p0.y)*dX + (p0.x-p2.x)*dY;
+    if (D<0) return s<=0 && t<=0 && s+t>=D;
+    return s>=0 && t>=0 && s+t<=D;
+}
+*/
+
+bool point_in_triangle(struct point2 p, struct triangle t)
+{
+    int d_x = p.x - t.p3.x;
+    int d_y = p.y - t.p3.y;
+    int d_x_21 = t.p3.x - t.p2.x;
+    int d_y_12 = t.p2.y - t.p3.y;
+    int d = d_y_12 * (t.p1.x - t.p3.x) + d_x_21 * (t.p1.y - t.p3.y);
+    int s = d_y_12 * d_x + d_x_21 * d_y;
+    int tt = (t.p3.y - t.p1.y) * d_x + (t.p1.x - t.p3.x) * d_y;
+    if(d < 0) return s <= 0 && tt <= 0 && s+tt >= d;
+    return s >= 0 && tt >= 0 && s+tt <= d;
+}
+
 void draw_world(struct window *window, struct map *map, int x, int y, int radius, bool hide_statics, bool hide_roofs, bool hide_walls, bool show_z, struct vector2 mouse_pos)
 {
     int init_x = x - radius;
@@ -49,8 +76,18 @@ void draw_world(struct window *window, struct map *map, int x, int y, int radius
             }
 
             // Mouse Picking tests
-            if(mouse_pos.x >= (plot_x - (tile_width / 2)) && mouse_pos.x <= (plot_x + (tile_width / 2)) &&
-                    mouse_pos.y >= ((plot_y - land_z) - (tile_height / 2)) && mouse_pos.y <= ((plot_y - land_z) + (tile_height / 2)))
+            struct point2 mouse_point = {mouse_pos.x, mouse_pos.y};
+            struct triangle tile_tri_l = {
+                {plot_x, (plot_y - land_z) - tile_height / 2},
+                {plot_x - tile_width / 2, (plot_y - land_z)},
+                {plot_x, (plot_y - land_z) + tile_height / 2}
+            };
+            struct triangle tile_tri_r = {
+                {plot_x, (plot_y - land_z) - tile_height / 2},
+                {plot_x + tile_width / 2, (plot_y - land_z)},
+                {plot_x, (plot_y - land_z) + tile_height / 2}
+            };
+            if(point_in_triangle(mouse_point, tile_tri_l) || point_in_triangle(mouse_point, tile_tri_r))
                 color = GREEN;
             
             // Current Tile Coloring
